@@ -9,6 +9,7 @@ export const staticActions = [
         type: MenuPageType.MENU,
         sort: 1,
         showInMenu: ShowInMenuType.SHOW,
+        url: "model",
         children: [{
             id: "data-model",
             pId: "main-data-model",
@@ -17,6 +18,7 @@ export const staticActions = [
             type: MenuPageType.MENU,
             sort: 11,
             showInMenu: ShowInMenuType.SHOW,
+            url: "data",
             children: [{
                 id: "model-list",
                 pId: "data-model",
@@ -25,7 +27,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 111,
                 showInMenu: ShowInMenuType.HIDE,
-                url: "/data-model",
+                url: "",
                 component: "main-data-model/data-model/Index.vue",
             }, {
                 id: "model-sett",
@@ -35,7 +37,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 111,
                 showInMenu: ShowInMenuType.HIDE,
-                url: "/data-model/:modelId",
+                url: ":modelId",
                 component: "main-data-model/data-model/ModelEditor.vue",
             }],
         }, {
@@ -44,9 +46,9 @@ export const staticActions = [
             actionId: "viewMng",
             title: "视图管理",
             type: MenuPageType.MENU,
-            url: "",
             sort: 12,
             showInMenu: ShowInMenuType.SHOW,
+            url: "view",
             children: [{
                 id: "view-list",
                 pId: "view-management",
@@ -55,7 +57,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 121,
                 showInMenu: ShowInMenuType.HIDE,
-                url: "/view-management",
+                url: "",
                 component: "main-data-model/view-management/Index.vue",
             }, {
                 id: "view-editor",
@@ -65,7 +67,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 121,
                 showInMenu: ShowInMenuType.HIDE,
-                url: "/view-management/add",
+                url: "add",
                 component: "main-data-model/view-management/ViewEditor.vue",
             }, {
                 id: "edit-view",
@@ -75,7 +77,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 11,
                 showInMenu: ShowInMenuType.HIDE,
-                url: "/view-management/edit/:viewId",
+                url: ":viewId",
                 component: "main-data-model/view-management/ViewEditor.vue",
             }],
         }],
@@ -87,7 +89,7 @@ export const staticActions = [
         type: MenuPageType.PAGE,
         sort: 2,
         showInMenu: ShowInMenuType.SHOW,
-        url: "/main-data-management",
+        url: "main-data-management",
     }, {
         id: "data-interface",
         pId: "",
@@ -96,6 +98,7 @@ export const staticActions = [
         type: MenuPageType.MENU,
         sort: 3,
         showInMenu: ShowInMenuType.SHOW,
+        url: "interface",
         children: [{
             id: "interface-setting",
             pId: "interface",
@@ -104,7 +107,7 @@ export const staticActions = [
             type: MenuPageType.PAGE,
             sort: 31,
             showInMenu: ShowInMenuType.SHOW,
-            url: "/interface-setting",
+            url: "",
             component: "",
         }, {
             id: "interface-log",
@@ -114,7 +117,7 @@ export const staticActions = [
             type: MenuPageType.PAGE,
             sort: 32,
             showInMenu: ShowInMenuType.SHOW,
-            url: "/interface-log",
+            url: "log",
             component: "",
         }],
     }, {
@@ -125,16 +128,17 @@ export const staticActions = [
         type: MenuPageType.PAGE,
         sort: 4,
         showInMenu: ShowInMenuType.SHOW,
-        url: "/help-center",
+        url: "help",
         component: "",
     }, {
         id: "1536643442430447616",
         pId: "",
-        actionId: "SysMng",
+        actionId: "SysSettings",
         title: "系统管理",
         type: MenuPageType.MENU,
         sort: 9,
         showInMenu: ShowInMenuType.SHOW,
+        url: "settings",
         children: [
             {
                 id: "licence",
@@ -144,7 +148,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 90,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/license",
+                url: "license",
                 component: "",
             },
             {
@@ -155,7 +159,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 91,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/user-management",
+                url: "user",
                 // component: "settings/UserManagement",
             },
             {
@@ -166,7 +170,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 92,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/role-management",
+                url: "role",
                 // component: "settings/RoleManagement",
             },
             {
@@ -177,7 +181,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 92,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/menu-management",
+                url: "menu",
                 // component: "settings/MenuManagement",
             },
             {
@@ -188,7 +192,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 94,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/permission-management",
+                url: "permission",
                 // component: "settings/PermissionManagement",
             },
             {
@@ -199,7 +203,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 95,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/organization-management",
+                url: "organization",
                 // component: "settings/OrganizationManagement",
             },
             {
@@ -210,7 +214,7 @@ export const staticActions = [
                 type: MenuPageType.PAGE,
                 sort: 96,
                 showInMenu: ShowInMenuType.SHOW,
-                url: "/password-management",
+                url: "password",
                 // component: "settings/PasswordManagement",
             }
         ],

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.13.0...v0.14.0) (2024-07-22)
+
+
+### Features
+
+* 新增 menuStore 用于作为全局的菜单状态存储 ([1fbef5b](https://github.com/thelastcookies/WEB-BASE/commit/1fbef5b509255720b598c4748345fc7d881f2271))
+* 新增用户，角色，权限的接口以及类型声明 ([c27982c](https://github.com/thelastcookies/WEB-BASE/commit/c27982cf011f14dce2e449124a8172154c18875d))
+
 ## [0.13.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.12.0...v0.13.0) (2024-07-20)
 
 

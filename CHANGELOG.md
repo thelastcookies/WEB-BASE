@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.1](https://github.com/thelastcookies/WEB-BASE/compare/v0.21.0...v0.21.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* 修复修改密码弹窗关闭后无法再次打开的问题 ([bf8d7b3](https://github.com/thelastcookies/WEB-BASE/commit/bf8d7b3ca64e4275651925f5c2ad88d55a212fa6))
+
 ## [0.21.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.20.0...v0.21.0) (2024-10-08)
 
 

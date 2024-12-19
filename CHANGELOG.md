@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.24.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.23.0...v0.24.0) (2024-12-19)
+
+
+### Features
+
+* 修复 QRCodeScanner 组件的已知问题 ([96059b2](https://github.com/thelastcookies/WEB-BASE/commit/96059b25808d167fd268e444f8316474d91345ff))
+* 完善 IFrame 组件的通信功能 ([67a8192](https://github.com/thelastcookies/WEB-BASE/commit/67a8192559e64cbb06731d943e52de4b84257abe))
+* 完成登录表单的自动完成支持 ([350a11b](https://github.com/thelastcookies/WEB-BASE/commit/350a11bc20ae5be54299bd3a0f3ae28d27337158))
+* 将组态模块迁移至新模板项目维护 ([b41806a](https://github.com/thelastcookies/WEB-BASE/commit/b41806a7dcb71a878cf7c6fd1017c7696434d0c0))
+* 新增二维码扫描组件与示例 ([a55cc98](https://github.com/thelastcookies/WEB-BASE/commit/a55cc98833d747902c2fd6ac31e2cb65ca500376))
+* 新增组态组件的 query 参数支持与页面内按钮跳转支持 ([a52ff9b](https://github.com/thelastcookies/WEB-BASE/commit/a52ff9b3d1fe7b97592de4915589ea568e702ed4))
+* 新增菜单和 Banner 的配置隐藏功能 ([4190a01](https://github.com/thelastcookies/WEB-BASE/commit/4190a018b1e60da2cd596b760ec50ac748689a6a))
+* 更新前端静态路由配置，重新整理各个设置页面 ([c16ade0](https://github.com/thelastcookies/WEB-BASE/commit/c16ade034fc769d5df68af997ddbd4368716ce3e))
+* 登录表单移除记住密码选项，增加注册提示，增加表单的自动完成，修复样式问题 ([1e797a1](https://github.com/thelastcookies/WEB-BASE/commit/1e797a1ed5577f5dece8a07a182ef0e14451621c))
+
+
+### Bug Fixes
+
+* 修复用户角色信息修改失败的问题 ([714717d](https://github.com/thelastcookies/WEB-BASE/commit/714717d12d07cdf1a488515abc535a70a184f747))
+* 修复登录过期后登出的问题 ([d6cb477](https://github.com/thelastcookies/WEB-BASE/commit/d6cb4773f7d17bafb6eff7ed88bac020725d5c51))
+* 修复菜单无法正常加载的问题 ([84556a3](https://github.com/thelastcookies/WEB-BASE/commit/84556a3d6a30cd92a1725f15959bc98aa98d1d17))
+
 ## [0.23.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.22.0...v0.23.0) (2024-11-21)
 
 

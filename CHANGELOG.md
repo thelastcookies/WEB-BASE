@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.24.0...v0.25.0) (2025-01-01)
+
+
+### Features
+
+* 增加 QueryForm 对查询字段的自定义 ColSpan 支持 ([228f96d](https://github.com/thelastcookies/WEB-BASE/commit/228f96dcb3971b7e91988f540637595284e384f7))
+
 ## [0.24.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.23.0...v0.24.0) (2024-12-24)
 
 

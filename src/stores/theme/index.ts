@@ -1,7 +1,8 @@
 import 'dayjs/locale/zh-cn';
 import type { Handler } from 'mitt';
 
-const themeMode = import.meta.env.APP_THEME;
+const themeModeEnv = import.meta.env.APP_THEME;
+const layoutModeEnv = import.meta.env.APP_LAYOUT_MODE;
 
 /**
  * 主题状态管理
@@ -25,8 +26,10 @@ export const useThemeStore = defineStore('theme', () => {
 
   // 主题配色模式
   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  const isDarkTheme = ref(themeMode === 'system' ? darkModeMediaQuery.matches : themeMode === 'dark');
+  const isDarkTheme = ref(themeModeEnv === 'system' ? darkModeMediaQuery.matches : themeModeEnv === 'dark');
   const emitter = mitt();
+
+  const layoutMode = computed(() => { return layoutModeEnv.split(',');});
 
   const themeModeChange = (e: MediaQueryListEvent) => {
     isDarkTheme.value = e.matches;
@@ -44,10 +47,10 @@ export const useThemeStore = defineStore('theme', () => {
     return isDarkTheme.value ? darkToken : defaultToken;
   });
 
-  if (themeMode === 'system') darkModeMediaQuery.addEventListener('change', themeModeChange);
+  if (themeModeEnv === 'system') darkModeMediaQuery.addEventListener('change', themeModeChange);
 
   tryOnUnmounted(() => {
-    if (themeMode === 'system') darkModeMediaQuery.removeEventListener('change', themeModeChange);
+    if (themeModeEnv === 'system') darkModeMediaQuery.removeEventListener('change', themeModeChange);
   });
 
   const listenThemeChange = (
@@ -64,5 +67,5 @@ export const useThemeStore = defineStore('theme', () => {
     emitter.off(THEME_CHANGE_KEY);
   };
 
-  return { isDarkTheme, designToken, themeAlgorithm, listenThemeChange, removeThemeListener };
+  return { isDarkTheme, designToken, themeAlgorithm, layoutMode, listenThemeChange, removeThemeListener };
 });

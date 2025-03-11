@@ -10,6 +10,8 @@ const menuStore = useMenuStore();
 const { actionToMenu } = menuStore;
 const { menu } = storeToRefs(menuStore);
 
+const { layoutMode } = useThemeStore();
+
 watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
   menu.value = actionToMenu(tree);
 }, {
@@ -20,13 +22,12 @@ watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
 <template>
   <a-layout w-full h-full>
     <a-layout-header
-      v-if="menu.length"
       class="!h-12" :class="[deviceType === 'desktop'? '!px-6': '!px-4']">
-      <Header />
+      <Header :menu="menu" :layoutMode="layoutMode" />
     </a-layout-header>
     <a-layout>
       <a-layout-sider
-        v-if="deviceType === 'desktop' && menu.length"
+        v-if="deviceType === 'desktop' && layoutMode.includes('MENU') && menu.length"
         width="220" breakpoint="xl" collapsed-width="50">
         <SidebarMenu :menu="menu"></SidebarMenu>
       </a-layout-sider>

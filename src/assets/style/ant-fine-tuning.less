@@ -41,3 +41,55 @@
     cursor: help
   }
 }
+
+// 顶部菜单样式
+.ant-menu-horizontal {
+  background-color: transparent !important;
+  justify-content: flex-end;
+  border-bottom: 0;
+
+  .ant-menu-item,
+  .ant-menu-submenu {
+    color: #FFF;
+    line-height: 48px;
+
+    &::after {
+      bottom: 2px !important;
+    }
+
+    .ant-menu-submenu-title {
+      color: #FFF;
+      line-height: 48px;
+    }
+  }
+
+  // 悬浮时文字颜色（针对浅色模式下的默认样式覆盖）
+  .ant-menu-item-active,
+  .ant-menu-submenu-active {
+    color: #FFF !important;
+
+    .ant-menu-submenu-title {
+      color: #FFF !important;
+    }
+  }
+
+  // 选中时文字高亮颜色
+  .ant-menu-item-selected,
+  .ant-menu-submenu-selected {
+    color: var(--topMenuTextColor) !important;
+
+    .ant-menu-submenu-title {
+      color: var(--topMenuTextColor) !important;
+    }
+  }
+
+  // 高亮下划线，悬停和选中时可用
+  .ant-menu-item-active,
+  .ant-menu-submenu-active,
+  .ant-menu-item-selected,
+  .ant-menu-submenu-selected {
+    &::after {
+      border-bottom-color: var(--topMenuTextColor) !important;
+    }
+  }
+}

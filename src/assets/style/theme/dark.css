@@ -4,7 +4,10 @@
   --tableTrStripedBg: #1B1B1B;
 
   /* input 自动完成背景填充色 */
-  --colorWebkitAutofillBg: rgba(70, 90, 126, 0.4)
+  --colorWebkitAutofillBg: rgba(70, 90, 126, 0.4);
+
+  /* Antdv 顶部菜单高亮字体颜色 */
+  --topMenuTextColor: #3C89E8;
 }
 
 /* 针对 Safari 浏览器的自动完成背景填充色 */

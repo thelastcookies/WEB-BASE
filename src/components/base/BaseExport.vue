@@ -77,8 +77,5 @@ const handleMenuClick: MenuProps['onClick'] = async ({ key }) => {
       导出
       <BaseIcon icon="i-mdi-chevron-down" />
     </a-button>
-    <div id="copy-container">
-      fsdafasd
-    </div>
   </a-dropdown>
 </template>

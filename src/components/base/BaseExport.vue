@@ -1,42 +1,44 @@
 <script setup lang="ts">
-
 import type { MenuProps } from 'ant-design-vue';
 
-// 选择器列
-const selectionColumnClassList = [
-  '.ant-table-selection-col',
-  '.ant-table-selection-column',
-];
-// 操作列
-const operationColumnClassList = [
-  'colgroup col:last-child',
-  'tr th:last-child',
-  'tr td:last-child',
-];
-
-
 const props = withDefaults(defineProps<{
-  domId: string;
+  domId?: string;
   exportName?: string;
-  excludeOperation?: boolean;
 }>(), {
   domId: 'table',
   exportName: '导出',
-  excludeOperation: true,
 });
+
+// 移除列
+const removeCols = [
+  // 选择器列
+  '.ant-table-selection-col',
+  '.ant-table-selection-column',
+  // 操作列
+  'colgroup col:last-child',
+  'tr th:last-child',
+  'tr td:last-child',
+  '.un-export-column',
+];
+
+// 移除行
+const removeRows = [
+  // 测量行
+  '.ant-table-measure-row',
+];
 
 const handleMenuClick: MenuProps['onClick'] = async ({ key }) => {
   let dom = document.getElementById(props.domId)!;
+  if (!dom) {
+    console.error(`BaseExport 'handleMenuClick': Failed to get the export DOM`);
+    return;
+  }
   const wrapper = dom.closest('.ant-table-wrapper')!;
   const copy = wrapper.cloneNode(true) as HTMLTableElement;
-  let removeClassList = [...selectionColumnClassList];
-  if (props.excludeOperation) {
-    removeClassList = [...removeClassList, ...operationColumnClassList];
-  }
-  // 移除不进行导出的列
-  const col = copy.querySelectorAll(removeClassList.join(','));
-  for (let i = 0, len = col.length; i < len; i++) {
-    col[i].remove();
+  // 移除不进行导出的行列
+  const removes = copy.querySelectorAll([...removeCols, ...removeRows].join(','));
+  for (let i = 0, len = removes.length; i < len; i++) {
+    removes[i].remove();
   }
   if (key === 'Excel') {
     exportTableAsXlsx(copy, props.exportName);
@@ -73,7 +75,7 @@ const handleMenuClick: MenuProps['onClick'] = async ({ key }) => {
       </a-menu>
     </template>
     <a-button ml-2 pr-2>
-      <BaseIcon icon="i-mdi-export" />
+      <BaseIcon icon="i-mdi-logout" />
       导出
       <BaseIcon icon="i-mdi-chevron-down" />
     </a-button>

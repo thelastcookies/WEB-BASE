@@ -18,7 +18,7 @@ export const generateRouterConf = (actionTree: TreeNode<ActionRecordRaw>[]) => {
     homePage = findAction(actionTree, homePageId);
   }
   if (!homePage) {
-    console.error(`Router.generate "generateRouterConf": Cannot find homepage by id: ${homePageId}.`);
+    console.error(`Router.generate 'generateRouterConf': Cannot find homepage by id: ${homePageId}.`);
   }
 
   // 为 Layout 添加指向首页的 redirect

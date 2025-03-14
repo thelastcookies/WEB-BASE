@@ -51,7 +51,7 @@ const onFinish = () => {
     }
     emit('query', form.value);
   } catch (e) {
-    console.error(`QueryForm: 'onFinish'`, e);
+    console.error(`QueryForm 'onFinish': ${e}`);
   }
 };
 

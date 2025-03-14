@@ -134,7 +134,7 @@ export const exportTableAsDocx = (
       if (table instanceof Table) {
         sections.push(table);
       } else {
-        console.error(`export.exportTableAsDocx: Failed to parse TABLE DOM`);
+        console.error(`utils.export.exportTableAsDocx: Failed to parse TABLE DOM`);
         return;
       }
     } else {
@@ -145,7 +145,7 @@ export const exportTableAsDocx = (
         if (table instanceof Table) {
           sections.push(table);
         } else {
-          console.error(`export.exportTableAsDocx: Failed to parse TABLE DOM`);
+          console.error(`utils.export.exportTableAsDocx: Failed to parse TABLE DOM`);
           return;
         }
       }
@@ -164,7 +164,7 @@ export const exportTableAsDocx = (
         FileSaver.saveAs(blob, `${fileName}.docx`);
       });
     } catch (e) {
-      console.error(`export.exportTableAsDocx: Failed to save blob as docx file`);
+      console.error(`utils.export.exportTableAsDocx: Failed to save blob as docx file`);
     }
   } catch (e) {
     message.error('导出失败');
@@ -260,7 +260,7 @@ export const exportTableAsPdf = async (
     try {
       // let dom = document.getElementById(domId)!;
       if (!dom) {
-        // console.error(`export.exportAsPdf: Invalid DOM #${domId}`);
+        // console.error(`utils.export.exportAsPdf: Invalid DOM #${domId}`);
       }
       let PDF = new jsPDFExd({
         orientation: 'p',

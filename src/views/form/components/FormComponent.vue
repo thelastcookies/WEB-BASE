@@ -36,7 +36,7 @@ const emit = defineEmits<{
       :is="FormComponents[config.type]"
       v-bind="config.props"
     />
-    <div :class="['component-tools', 'vertical-tools']" v-if="active && config.props && config.mode === 'edit'">
+    <div v-if="active && config.props && config.mode === 'edit'" :class="['component-tools', 'vertical-tools']">
       <a-tooltip>
         <template #title>复制</template>
         <div class="icon" @click.stop="emit('copy')">

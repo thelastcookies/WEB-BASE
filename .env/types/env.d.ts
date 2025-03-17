@@ -11,6 +11,7 @@ interface ImportMetaEnv {
    * 可选的配置项包括：
    *   MENU：左侧展示菜单栏，纵向排列
    *   MENU_TOP：顶部展示菜单栏，横向排列
+   *   PAGE_HEADER：PageHeader 可用，显示页面标题
    *   TAB：tab标签栏可用，且单个页面对应单个tab
    *   MULTI_TAB：tab标签栏可用，且单个页面支持tab多开
    *   BREADCRUMB：面包屑导航可用

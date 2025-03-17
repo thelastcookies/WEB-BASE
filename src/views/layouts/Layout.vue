@@ -32,7 +32,7 @@ watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
         <SidebarMenu :menu="menu"></SidebarMenu>
       </a-layout-sider>
       <a-layout>
-        <PageHeader v-if="deviceType === 'desktop'"></PageHeader>
+        <PageHeader v-if="deviceType === 'desktop' && layoutMode.includes('PAGE_HEADER')"></PageHeader>
         <a-layout-content overflow-x-hidden overflow-y-auto>
           <RouterView v-slot="{ Component, route }">
             <Transition appear name="slide-fade" mode="out-in">

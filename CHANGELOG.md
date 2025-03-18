@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.25.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.24.0...v0.25.0) (2025-03-18)
+
+
+### Features
+
+* 全局启用 KeepAlive，移除 Parent 组件 ([d226c78](https://github.com/thelastcookies/WEB-BASE/commit/d226c78fd87f47aa17a5c0e8f95257411971a6af))
+* 增加 QueryForm 对查询字段的自定义 ColSpan 支持 ([228f96d](https://github.com/thelastcookies/WEB-BASE/commit/228f96dcb3971b7e91988f540637595284e384f7))
+* 完善 PageHeader 中的面包屑点击导航功能 ([67e045f](https://github.com/thelastcookies/WEB-BASE/commit/67e045fcae32f7e21daf3db3534960a83170e59e))
+* 完善 PageHeader 的可配置功能 ([68de0f6](https://github.com/thelastcookies/WEB-BASE/commit/68de0f61c9355533d8998f6157160c46d0c13bdb))
+* 完成顶部菜单功能 ([70c9cfd](https://github.com/thelastcookies/WEB-BASE/commit/70c9cfd2745d8d44cc0e0648ff7388d96008e1bb))
+* 新增 layoutMode 全局状态管理，修改 layoutMode 环境变量配置 ([e276529](https://github.com/thelastcookies/WEB-BASE/commit/e2765290861afcff0d8cabbe01fe9ecc2ae892f6))
+* 新增 QueryForm 对于级联选择器的支持 ([3f0df97](https://github.com/thelastcookies/WEB-BASE/commit/3f0df97280ce0c072be295c5d9814c7c5f21e0fb))
+* 新增主题模式的环境变量配置支持 ([4c70e78](https://github.com/thelastcookies/WEB-BASE/commit/4c70e78daeac430f82de989f2b153abdf81bc005))
+
+
+### Bug Fixes
+
+* 修复 routeTo 方法重定向时路由参数的缺失 ([1d70def](https://github.com/thelastcookies/WEB-BASE/commit/1d70def65d0d94ce3615678cbca5a3585372b6b8))
+* 修复导出功能已知问题 ([75d677d](https://github.com/thelastcookies/WEB-BASE/commit/75d677db09369b1a187249c0cb5acf3d0e67e844))
+* 取消全局的网络请求失败提示 ([8d7fd6e](https://github.com/thelastcookies/WEB-BASE/commit/8d7fd6e14574945f9ebee14a14d5d1a7a683651f))
+
+
+### Performance Improvements
+
+* 优化 QueryForm 数据结构 ([fd986a6](https://github.com/thelastcookies/WEB-BASE/commit/fd986a685aacd90dd1490ff2b65de91d53f3539a))
+
 ## [0.24.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.23.0...v0.24.0) (2024-12-24)
 
 

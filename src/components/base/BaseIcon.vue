@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * v0.24.0 弃用 Antdv 组件库
+ * v0.24.0 弃用 Antdv 图标库
  * v0.11.0 引入 iconify-mdi 为主要图标库
  * https://icones.js.org/collection/mdi
  */

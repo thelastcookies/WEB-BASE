@@ -54,6 +54,7 @@ export const userTableColumns: TableColumnProps[] = [
     title: '操作',
     width: 160,
     dataIndex: 'operation',
+    className: 'un-export-column',
   },
 ];
 

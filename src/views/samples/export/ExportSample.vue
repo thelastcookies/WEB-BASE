@@ -78,6 +78,7 @@ const columns = [
     title: '操作',
     dataIndex: 'operation',
     width: 180,
+    className: 'un-export-column',
   },
 ];
 </script>

@@ -2,6 +2,7 @@
 import type { Key, Recordable } from '@/types';
 import type { TablePaginationConfig } from 'ant-design-vue';
 import type { UserRecord } from '@/api/admin/user/types';
+import type { EditEnum as EditEnumType } from '@/constants/enums';
 
 /**
  * table 属性与方法
@@ -56,7 +57,7 @@ const onSelectionChange = (keys: Key[]) => {
   selectedRowKeys.value = keys;
 };
 
-const handleEdit = (type: number, data?: UserRecord) => {
+const handleEdit = (type: EditEnumType, data?: UserRecord) => {
   modalOpen.value = true;
   modalType.value = type;
   if (type === EditEnum.EDIT) {

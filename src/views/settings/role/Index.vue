@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Key, Recordable } from '@/types';
 import type { RoleRecord } from '@/api/admin/role/types';
+import type { EditEnum as EditEnumType } from '@/constants/enums';
 
 /**
  * table 属性与方法
@@ -42,7 +43,7 @@ const onSelectionChange = (keys: Key[]) => {
   selectedRowKeys.value = keys;
 };
 
-const handleEdit = (type: number, data?: RoleRecord) => {
+const handleEdit = (type: EditEnumType, data?: RoleRecord) => {
   modalOpen.value = true;
   modalType.value = type;
   if (type === EditEnum.EDIT) {

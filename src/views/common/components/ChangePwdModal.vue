@@ -36,7 +36,7 @@ const validatePass2 = async (_rule: Rule, value: string) => {
   if (value === '') {
     return Promise.reject('请再次输入新密码');
   } else if (value !== formData.value.newPwd) {
-    return Promise.reject('原密码与确认密码必须相同');
+    return Promise.reject('新密码与确认密码必须相同');
   } else {
     return Promise.resolve();
   }

@@ -22,7 +22,7 @@ export const getUser = (id: string) => {
 
 // 按照 UserListOptionItem 的结构返回用户列表，便于在组件内使用
 export const getOptionList = (data: GetOptionRequestBody) => {
-  return usePost<AdminResponseBody<UserListOptionItem>, GetOptionRequestBody>(
+  return usePost<AdminResponseBody<UserListOptionItem[]>, GetOptionRequestBody>(
     `${ADMIN_URL}/Base_Manage/Base_User/GetOptionList`,
     data,
   );

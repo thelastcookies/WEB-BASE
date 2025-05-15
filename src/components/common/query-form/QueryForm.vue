@@ -29,7 +29,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const slotsCount = Object.keys(slots).length;
+const slotsCount = Object.keys(slots).filter(k => k.includes('btn')).length;
 
 const { deviceType } = useAppStore();
 
@@ -138,14 +138,18 @@ const handleClear = () => {
         <slot name="default"></slot>
       </a-col>
       <a-col class="text-right mb-3" :span="SPAN" :offset="btnGroupOffset">
-        <a-button type="primary" html-type="submit">
-          <BaseIcon icon="i-mdi-magnify" />
-          查询
-        </a-button>
-        <a-button class="ml-2" @click="handleClear">
-          <BaseIcon icon="i-mdi-filter-remove-outline" />
-          清空
-        </a-button>
+        <slot name="main-btn">
+          <a-button type="primary" html-type="submit">
+            <BaseIcon icon="i-mdi-magnify" />
+            查询
+          </a-button>
+        </slot>
+        <slot name="minor-btn">
+          <a-button class="ml-2" @click="handleClear">
+            <BaseIcon icon="i-mdi-filter-remove-outline" />
+            清空
+          </a-button>
+        </slot>
         <a-button v-if="(fields.length + slotsCount) >= ITEM_IN_LINE" type="link" @click="expand = !expand">
           <template v-if="expand">
             <BaseIcon icon="i-mdi-chevron-up" />

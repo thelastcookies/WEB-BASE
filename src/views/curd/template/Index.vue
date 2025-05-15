@@ -136,7 +136,7 @@ const batchDelete = async (ids: string[]) => {
               删除
             </a-button>
           </a-popconfirm>
-          <BaseExport export-name="列表CURD" dom-id="table"></BaseExport>
+          <BaseExport export-name="列表CURD" dom="table"></BaseExport>
         </div>
       </template>
       <template #bodyCell="{ column, index, record }">

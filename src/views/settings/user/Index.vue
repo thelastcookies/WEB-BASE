@@ -134,7 +134,7 @@ const batchDelete = async (ids: string[]) => {
             <BaseIcon icon="i-mdi-login" />
             导入
           </a-button>
-          <BaseExport export-name="用户表" dom-id="user-table" />
+          <BaseExport export-name="用户表" dom="user-table" />
         </div>
       </template>
       <template #bodyCell="{ column, record }">

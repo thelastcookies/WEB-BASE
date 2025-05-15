@@ -91,9 +91,10 @@ const columns = [
   >
     <template #title>
       <div class="flex">
-        <div>导出表格示例<span class="ml-10">注：左侧多选框，表格标题以及操作按钮，行内操作按钮，表格分页器不会被导出</span>
+        <div>标题：导出表格示例<span
+          class="ml-10">注：左侧多选框列，表格标题、表头操作按钮，分页器以及其他指定不导出的列不会被导出</span>
         </div>
-        <BaseExport class="ml-a" export-name="导出表格" dom-id="table"></BaseExport>
+        <BaseExport class="ml-a" export-name="导出表格" dom="table"></BaseExport>
       </div>
     </template>
     <template #bodyCell="{ column, index }">

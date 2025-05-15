@@ -2,10 +2,10 @@
 import type { MenuProps } from 'ant-design-vue';
 
 const props = withDefaults(defineProps<{
-  domId?: string;
+  dom?: string | string[];
   exportName?: string;
 }>(), {
-  domId: 'table',
+  dom: 'table',
   exportName: '导出',
 });
 
@@ -25,9 +25,42 @@ const removeRows = [
 ];
 
 const handleMenuClick: MenuProps['onClick'] = async ({ key }) => {
-  let dom = document.getElementById(props.domId)!;
+  let domList: HTMLTableElement[] = [];
+  if (props.dom instanceof Array) {
+    props.dom.forEach(item => {
+      domList.push(getDomById(item)!);
+    });
+  } else {
+    let dom = getDomById(props.dom)!;
+    domList.push(dom);
+  }
+  if (key === 'Excel') {
+    const nameList = props.dom instanceof Array ? props.dom : [];
+    exportTableAsXlsx(domList, props.exportName, nameList);
+  } else if (key === 'Word') {
+    exportTableAsDocx(domList, props.exportName);
+  } else if (key === 'PDF') {
+    const app = document.getElementById('app')!;
+    domList.forEach(dom => {
+      dom.style.position = 'fixed';
+      dom.style.width = '100%';
+      dom.style.maxWidth = '1500px';
+      dom.classList.add('export-table-as-pdf');
+      app.appendChild(dom);
+    });
+
+    await exportTableAsPdf(domList, props.exportName);
+    const elements = document.querySelectorAll('.export-table-as-pdf');
+    elements.forEach(ele => {
+      ele.remove();
+    });
+  }
+};
+
+const getDomById = (id: string) => {
+  let dom = document.getElementById(id)!;
   if (!dom) {
-    console.error(`BaseExport 'handleMenuClick': Failed to get the export DOM`);
+    console.error(`BaseExport 'getDomById': Failed to get the export DOM`);
     return;
   }
   const wrapper = dom.closest('.ant-table-wrapper')!;
@@ -37,20 +70,9 @@ const handleMenuClick: MenuProps['onClick'] = async ({ key }) => {
   for (let i = 0, len = removes.length; i < len; i++) {
     removes[i].remove();
   }
-  if (key === 'Excel') {
-    exportTableAsXlsx(copy, props.exportName);
-  } else if (key === 'Word') {
-    exportTableAsDocx(copy, props.exportName);
-  } else if (key === 'PDF') {
-    copy.style.position = 'fixed';
-    copy.style.width = '100%';
-    copy.style.maxWidth = '1500px';
-    const app = document.getElementById('app')!;
-    app.appendChild(copy);
-    await exportTableAsPdf(copy, props.exportName);
-    app.removeChild(copy);
-  }
+  return copy;
 };
+
 </script>
 
 <template>

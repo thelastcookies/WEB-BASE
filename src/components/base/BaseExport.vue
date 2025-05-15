@@ -14,10 +14,7 @@ const removeCols = [
   // 选择器列
   '.ant-table-selection-col',
   '.ant-table-selection-column',
-  // 操作列
-  'colgroup col:last-child',
-  'tr th:last-child',
-  'tr td:last-child',
+  // 明确指定不导出的列
   '.un-export-column',
 ];
 

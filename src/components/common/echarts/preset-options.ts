@@ -14,7 +14,7 @@ export const echartsLoadingOptions = {
 };
 
 export const generalLineChartOption = <EChartsOption>{
-  grid: { top: '60px', bottom: '30px', left: '40px', right: '20px' },
+  grid: { top: '60px', bottom: '40px', left: '40px', right: '20px' },
   legend: {
     itemWidth: 10,
     itemHeight: 10,
@@ -38,6 +38,8 @@ export const generalLineChartOption = <EChartsOption>{
       showMaxLabel: true,
       alignMinLabel: 'left',
       alignMaxLabel: 'right',
+      width: 80,
+      overflow: 'break',
     },
   },
   yAxis: {

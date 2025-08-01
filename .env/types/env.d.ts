@@ -38,6 +38,8 @@ interface ImportMetaEnv {
   readonly APP_API_ADMIN_URL: string;
   readonly APP_API_MOCK_URL: string;
   readonly APP_WHITE_ORIGIN: string;
+  // 组态部署目录路径
+  readonly APP_DIAGRAM_RESOURCE_URL: string;
 }
 
 interface ImportMeta {

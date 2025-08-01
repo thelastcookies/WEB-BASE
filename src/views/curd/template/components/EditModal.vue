@@ -29,6 +29,8 @@ const title = computed(() => {
   return titleEnum[props.type];
 });
 
+const initData = {};
+
 const formRef = ref<FormInstance>();
 const formData = ref<TemplateMockRecord>({});
 
@@ -59,13 +61,16 @@ const handleSubmit = async () => {
 
 const handleClear = () => {
   formRef.value!.resetFields();
-  formData.value = {};
+  formData.value = merge({}, initData);
 };
 
 watch(open, (v) => {
   if (v && props.data) {
     formData.value = merge({}, props.data);
   }
+  // else {
+  //  handleClear();
+  // }
 });
 
 </script>

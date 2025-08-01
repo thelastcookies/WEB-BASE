@@ -62,7 +62,7 @@ const handleTableChange = (p: TablePaginationConfig) => {
  */
 const modalOpen = ref<boolean>(false);
 const modalType = ref<EditEnumType>(EditEnum.VIEW);
-const modalData = ref<TemplateMockRecord>({});
+const modalData = ref<TemplateMockRecord>();
 
 const handleEdit = (type: EditEnumType, data?: TemplateMockRecord) => {
   modalOpen.value = true;
@@ -70,7 +70,7 @@ const handleEdit = (type: EditEnumType, data?: TemplateMockRecord) => {
   if (type === EditEnum.EDIT || type === EditEnum.VIEW) {
     if (data) modalData.value = { ...data };
   } else if (type === EditEnum.ADD) {
-    modalData.value = {};
+    modalData.value = undefined;
   }
 };
 

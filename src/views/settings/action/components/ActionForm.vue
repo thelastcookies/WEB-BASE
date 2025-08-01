@@ -302,6 +302,22 @@ const handleDelete = async () => {
             </a-col>
           </a-row>
         </template>
+        <template v-else-if="formData.Type === MenuTypeEnum.DIAGRAM">
+          <a-row>
+            <a-col :span="12">
+              <a-form-item label="组态路径" name="Resource" tooltip="组态文件的部署路径">
+                <a-input v-model:value="formData.Resource" placeholder="请输入组态文件路径" />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="是否保活" name="KeepAlive" tooltip="勾选后当菜单切换时，该页面将被缓存">
+                <a-switch v-model:checked="formData.KeepAlive"
+                  checked-children="是" un-checked-children="否"
+                ></a-switch>
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </template>
         <a-row>
           <a-divider orientation="left">权限配置</a-divider>
         </a-row>

@@ -17,7 +17,11 @@ export const menuTypeOptions: DefaultOptionType[] = [
   {
     value: MenuTypeEnum.IFRAME,
     label: 'IFrame',
-  }
+  },
+  {
+    value: MenuTypeEnum.DIAGRAM,
+    label: '组态',
+  },
 ];
 
 export const permTableColumns: TableEditableColumnProps[] = [

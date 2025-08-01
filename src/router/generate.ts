@@ -86,11 +86,14 @@ const actionToRoute = (action: TreeNode<ActionRecordRaw>): RouteRecordRaw => {
     route.redirect = action.redirect ?? {
       name: findDescendantWithUrlDefined(action)?.actionId as RouteRecordName,
     };
+  } else if (action.type === MenuTypeEnum.LINK) {
+    route.component = getRouterModule('Link');
+    route.meta = { href: action.resource };
   } else if (action.type === MenuTypeEnum.IFRAME) {
     route.component = getRouterModule('IFrame');
     route.meta = { href: action.resource };
-  } else if (action.type === MenuTypeEnum.LINK) {
-    route.component = getRouterModule('Link');
+  } else if (action.type === MenuTypeEnum.DIAGRAM) {
+    route.component = getRouterModule('Diagram');
     route.meta = { href: action.resource };
   }
   if ('meta' in action) {

@@ -18,10 +18,12 @@ const modules = import.meta.glob([
 export const basicRouteMap = {
   // 用于 App 的根页面
   Layout: () => import('@/views/layouts/Layout.vue'),
-  // 用于 iframe 外嵌页面
-  IFrame: () => import('@/views/common/IFrame.vue'),
   // 用于链接跳转的页面
   Link: () => import('@/views/common/Link.vue'),
+  // 用于 iframe 外嵌页面
+  IFrame: () => import('@/views/common/IFrame.vue'),
+  // 用于组态图的页面
+  Diagram: () => import('@/views/diagram/Index.vue'),
   // 空页面
   ComponentError: () => import('@/views/exceptions/ComponentError.vue'),
 };

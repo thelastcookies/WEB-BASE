@@ -110,6 +110,16 @@ export const staticActions = createTree<ActionRecordRaw>([
       },
     ],
   }, {
+    id: '1436644431724154881',
+    actionId: 'diagram',
+    title: '组态图',
+    type: MenuTypeEnum.DIAGRAM,
+    icon: 'i-mdi-engine-outline',
+    sort: 6,
+    showInMenu: true,
+    url: 'diagram',
+    resource: 'graphs.cfd',
+  }, {
     id: '1436644431724154880',
     actionId: 'link',
     title: '外链',
@@ -129,15 +139,5 @@ export const staticActions = createTree<ActionRecordRaw>([
     showInMenu: true,
     url: 'iframe',
     resource: 'https://next.antdv.com/components/overview-cn',
-  }, {
-    id: '1436644431724154881',
-    actionId: 'diagram',
-    title: '组态图',
-    type: MenuTypeEnum.DIAGRAM,
-    icon: 'i-mdi-image-filter-drama-outline',
-    sort: 8,
-    showInMenu: true,
-    url: 'diagram',
-    resource: 'graphs.cfd',
   },
 ]);

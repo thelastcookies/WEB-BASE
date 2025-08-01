@@ -26,6 +26,8 @@ export const customImports: ImportsMap = {
     'max',
     'min',
     'sum',
+    'groupBy',
+    'round',
   ],
   'mitt': [
     ['default', 'mitt'],

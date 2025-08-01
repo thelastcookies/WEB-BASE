@@ -11,8 +11,8 @@ const metaKey = useKeyModifier('Meta');
 
 export const setSelection = (e: MouseEvent, map: Map<number, DiagramDataWithPosition>) => {
   e.stopPropagation();
-  const x = e.clientX;
-  const y = e.clientY;
+  const x = e.offsetX;
+  const y = e.offsetY;
 
   const ids = controlKey.value || metaKey.value ? [...selectionIds.value] : [];
   // 检查是否点击了某个对象

@@ -1,6 +1,80 @@
 import type { DiagramData, DiagramDataWithPosition, DiagramJson } from '@/types/diagram';
 import type { TextStyle } from '@/types/diagram/style';
 
+const PADDING = 50;
+
+export const init = (boundary: { top: number, right: number, bottom: number, left: number }) => {
+  const dmCanvas = document.getElementById('dm-canvas') as HTMLCanvasElement;
+  const slCanvas = document.getElementById('sl-canvas') as HTMLCanvasElement;
+
+  const { top, right, bottom, left } = boundary;
+
+  // 设置初始尺寸
+  const w = right - left + 2 * PADDING;
+  const h = bottom - top + 2 * PADDING;
+
+  dmCanvas.width = w;
+  dmCanvas.height = h;
+  slCanvas.width = w;
+  slCanvas.height = h;
+
+  const ctx1 = dmCanvas.getContext('2d')!;
+  const ctx2 = slCanvas.getContext('2d')!;
+
+  ctx1.imageSmoothingEnabled = true;
+  if (ctx1.imageSmoothingQuality) {
+    ctx1.imageSmoothingQuality = 'high';
+  }
+
+  // 位置修正
+  ctx1.translate(-left + PADDING, -top + PADDING);
+  ctx2.translate(-left + PADDING, -top + PADDING);
+
+  // 存储位置信息
+  dmCanvas.dataset['top'] = '' + top;
+  dmCanvas.dataset['right'] = '' + right;
+  dmCanvas.dataset['bottom'] = '' + bottom;
+  dmCanvas.dataset['left'] = '' + left;
+};
+
+export const fit = () => {
+  const dmCanvas = document.getElementById('dm-canvas') as HTMLCanvasElement;
+  const slCanvas = document.getElementById('sl-canvas') as HTMLCanvasElement;
+
+  // 视口宽高
+  const container = dmCanvas.parentElement!;
+  const pw = container.clientWidth;
+  const ph = container.clientHeight;
+
+  const w = dmCanvas.width;
+  const h = dmCanvas.height;
+
+  let scale = 1;
+
+  // 源图宽高比
+  const aspect = w / h;
+  // 画布宽高比
+  const canvasAspect = pw / ph;
+  if (aspect > canvasAspect) {
+    // 基于宽度适配
+    scale *= pw / w;
+  } else {
+    // 基于高度适配
+    scale *= ph / h;
+  }
+
+  dmCanvas.dataset['scale'] = '' + scale;
+  dmCanvas.style.scale = `${scale}`;
+  dmCanvas.style.left = `calc(50% - ${(w / 2) * scale}px)`;
+  dmCanvas.style.top = `calc(50% - ${(h / 2) * scale}px)`;
+
+  slCanvas.dataset['scale'] = '' + scale;
+  slCanvas.style.scale = `${scale}`;
+  slCanvas.style.left = `calc(50% - ${(w / 2) * scale}px)`;
+  slCanvas.style.top = `calc(50% - ${(h / 2) * scale}px)`;
+};
+
+
 export const deserializeDiagramFile = (json: DiagramJson): Map<number, DiagramDataWithPosition> => {
   const diagramMap = new Map<number, DiagramDataWithPosition>();
 
@@ -27,8 +101,6 @@ export const deserializeDiagramFile = (json: DiagramJson): Map<number, DiagramDa
   edges.forEach(d => {
     diagramMap.set(d.i, d);
   });
-
-  // console.log(diagramMap);
 
   return diagramMap;
 };
@@ -83,6 +155,23 @@ export const deserializeNode = (d: DiagramData): DiagramDataWithPosition => {
       x, y, w, h, angle, ...d,
     };
   }
+};
+
+export const getDiagramBoundary = (map: Map<number, DiagramDataWithPosition>) => {
+  let top = Infinity, right = -Infinity, bottom = -Infinity, left = Infinity;
+  map.forEach(d => {
+    if (d.p.position === undefined) return;
+    const t = (d.y ?? d.p.position.y) - (d.h ?? d.p.height) / 2;
+    const r = (d.x ?? d.p.position.x) + (d.w ?? d.p.width) / 2;
+    const b = (d.y ?? d.p.position.y) + (d.h ?? d.p.height) / 2;
+    const l = (d.x ?? d.p.position.x) - (d.w ?? d.p.width) / 2;
+    top = t < top ? t : top;
+    right = r > right ? r : right;
+    bottom = b > bottom ? b : bottom;
+    left = l < left ? l : left;
+  });
+
+  return { top, right, bottom, left };
 };
 
 export const getDiagramTags = (params: Map<number, DiagramDataWithPosition> | DiagramDataWithPosition[]) => {

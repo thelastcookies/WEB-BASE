@@ -14,7 +14,17 @@ export const draw = (canvas: HTMLCanvasElement, dmMap: Map<number, DiagramDataWi
   window.requestAnimationFrame(() => {
     const ctx = canvas.getContext('2d')!;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const top = Number(canvas.dataset.top) ?? 0;
+    const right = Number(canvas.dataset.right) ?? 0;
+    const bottom = Number(canvas.dataset.bottom) ?? 0;
+    const left = Number(canvas.dataset.left) ?? 0;
+
+    ctx.clearRect(left, top, right - left, bottom - top);
+
+    ctx.beginPath();
+    ctx.fillStyle = '#FF4500';
+    ctx.arc(10, 10, 10, 0, 2 * Math.PI);
+    ctx.fill();
     dmMap.forEach(d => {
       if (d.c === 'ht.Text') {
         drawText(ctx, d, tvMap);
@@ -26,6 +36,12 @@ export const draw = (canvas: HTMLCanvasElement, dmMap: Map<number, DiagramDataWi
         drawEdge(ctx, d, dmMap);
       }
     });
+
+    ctx.save();
+    ctx.strokeStyle = '#00FF00';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(left, top, right - left, bottom - top);
+    ctx.restore();
   });
 };
 
@@ -40,6 +56,7 @@ export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, Diag
     const ctx = canvas.getContext('2d')!;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
     ids.forEach((id) => {
       const d = dmMap.get(id)!;
       const x = d.x!;
@@ -55,7 +72,8 @@ export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, Diag
       ctx.setLineDash([5, 5]);
       ctx.strokeRect(dx - 2, dy - 2, w + 4, h + 4);
     });
-  });
+    ctx.restore();
+  })
 };
 
 

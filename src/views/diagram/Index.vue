@@ -37,22 +37,19 @@ const preprocessHref = (href: string) => {
 // 加载组态文件
 const load = async () => {
   try {
-    if (window.history.state.back) backBtnVisible.value = true;
+    // if (window.history.state.back) backBtnVisible.value = true;
     const route = useRoute();
     const res = await fetch(preprocessHref(route.query?.d ?? href.value));
     const json = await res.json();
 
-    dmCanvas.value!.width = dmContainer.value?.offsetWidth!;
-    dmCanvas.value!.height = dmContainer.value?.offsetHeight! - 78;
-
-    slCanvas.value!.width = dmContainer.value?.offsetWidth!;
-    slCanvas.value!.height = dmContainer.value?.offsetHeight! - 78;
-
     dmMap.value = deserializeDiagramFile(json);
 
-    nodeTagArr.value = getDiagramTags(dmMap.value);
-
+    const boundary = getDiagramBoundary(dmMap.value);
+    init(boundary);
+    fit();
     // draw(dmCanvas.value!, dmMap.value!);
+
+    nodeTagArr.value = getDiagramTags(dmMap.value);
 
     // 请求实时数据并定时
     resume();
@@ -106,7 +103,7 @@ watch(timeSliderValue, idx => {
 });
 
 const resize = useDebounceFn(() => {
-  // graphView.fitContent(FIT_CONTENT_ANIM);
+  fit();
 }, 200);
 
 useResizeObserver(dmContainer, () => {
@@ -161,9 +158,9 @@ const handleContextClick = (key: number) => {
         class="w-full relative"
         :class="[timeSliderOpen ? 'h-[calc(100%-78px)]' : 'h-full']"
       >
-        <canvas ref="slCanvas" id="sl-canvas" class="absolute top-0 left-0 z-10"
+        <canvas ref="slCanvas" id="sl-canvas" class="canvas z-10"
           @mousedown="handleMouseDown"></canvas>
-        <canvas ref="dmCanvas" id="dm-canvas" class="absolute top-0 left-0 z-5"></canvas>
+        <canvas ref="dmCanvas" id="dm-canvas" class="canvas z-5"></canvas>
       </div>
     </DiagramContextMenu>
     <a-button v-if="backBtnVisible"
@@ -181,3 +178,13 @@ const handleContextClick = (key: number) => {
     ></DiagramTrendModal>
   </div>
 </template>
+
+<style scoped lang="less">
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transition: all 0.1s;
+}
+</style>

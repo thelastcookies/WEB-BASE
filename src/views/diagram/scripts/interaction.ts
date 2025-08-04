@@ -9,10 +9,18 @@ const selectionIds = computed(() => selections.value.map(item => item.i));
 const controlKey = useKeyModifier('Control');
 const metaKey = useKeyModifier('Meta');
 
+const PADDING = 50;
 export const setSelection = (e: MouseEvent, map: Map<number, DiagramDataWithPosition>) => {
   e.stopPropagation();
-  const x = e.offsetX;
-  const y = e.offsetY;
+  let x = e.offsetX;
+  let y = e.offsetY;
+
+  const dmCanvas = document.getElementById('dm-canvas') as HTMLCanvasElement;
+  const left = dmCanvas.dataset['left']!;
+  const top = dmCanvas.dataset['top']!;
+
+  x += Number(left) - PADDING;
+  y += Number(top) - PADDING;
 
   const ids = controlKey.value || metaKey.value ? [...selectionIds.value] : [];
   // 检查是否点击了某个对象
@@ -29,12 +37,6 @@ export const setSelection = (e: MouseEvent, map: Map<number, DiagramDataWithPosi
       ids.push(id);
     }
   }
-
   drawSelection(e.target as HTMLCanvasElement, map, ids);
   selections.value = ids.map(id => map.get(id)!);
-};
-
-
-export const handleContextMenu = (e: MouseEvent) => {
-  e.stopPropagation();
 };

@@ -55,7 +55,13 @@ export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, Diag
   window.requestAnimationFrame(() => {
     const ctx = canvas.getContext('2d')!;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const top = Number(canvas.dataset.top) ?? 0;
+    const right = Number(canvas.dataset.right) ?? 0;
+    const bottom = Number(canvas.dataset.bottom) ?? 0;
+    const left = Number(canvas.dataset.left) ?? 0;
+
+    ctx.clearRect(left, top, right - left, bottom - top);
+
     ctx.save();
     ids.forEach((id) => {
       const d = dmMap.get(id)!;

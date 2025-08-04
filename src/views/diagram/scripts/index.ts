@@ -35,6 +35,11 @@ export const init = (boundary: { top: number, right: number, bottom: number, lef
   dmCanvas.dataset['right'] = '' + right;
   dmCanvas.dataset['bottom'] = '' + bottom;
   dmCanvas.dataset['left'] = '' + left;
+
+  slCanvas.dataset['top'] = '' + top;
+  slCanvas.dataset['right'] = '' + right;
+  slCanvas.dataset['bottom'] = '' + bottom;
+  slCanvas.dataset['left'] = '' + left;
 };
 
 export const fit = () => {

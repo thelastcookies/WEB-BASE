@@ -1,6 +1,5 @@
 import type { DiagramDataWithPosition, XYPoint } from '@/types/diagram';
 import type { EdgeStyle, ShapeStyle, TextStyle } from '@/types/diagram/style';
-import type { NodeColorAttr } from '@/types/diagram/attr';
 
 const { imageMap } = useDiagramStore();
 
@@ -79,7 +78,7 @@ export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, Diag
       ctx.strokeRect(dx - 2, dy - 2, w + 4, h + 4);
     });
     ctx.restore();
-  })
+  });
 };
 
 
@@ -109,28 +108,6 @@ const drawText = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvM
     ctx.textAlign = align;
     ctx.textBaseline = vAlign;
     ctx.fillStyle = textStyle['text.color'] ?? '#000';
-  } else if (name === '数据绑定') {
-    const label = d.a?.['node.label'] ?? '###.#';
-    const valueArr = label.split('.');
-    const decLen = valueArr[1] ? valueArr[1].length : 0;
-    text = value !== null ? value.toFixed(decLen) : label;
-    text += d.a?.['node.unit'] ?? '';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = (textStyle as NodeColorAttr)['node.color'] ?? '#00FF00';
-  } else if (name === '告警变色') {
-    text = d.a?.['node.label'] ?? '告警变色';
-    const color1 = d.a?.['node.color'] ?? '#D8D8D8';
-    const color2 = d.a?.['node.color2'] ?? '#FF0000';
-    const reverse = d.a?.['node.type.switch.reverse'] ?? false;
-    if (reverse && value) value = value ^ 1;
-    ctx.textAlign = 'center';
-    ctx.fillStyle = value === null ? color1 :
-      value === 1 ? color1 : color2;
-  } else if (name === '显示隐藏') {
-    if (value === 0) return;
-    text = d.a?.['node.label'] ?? '显示隐藏';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = (textStyle as NodeColorAttr)['node.color'] ?? '#FF0000';
   }
 
   ctx.font = textStyle['text.font'] ?? '16px arial, sans-serif';
@@ -175,7 +152,7 @@ const drawNode = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvM
   } else {
     const name = d.p.name;
     if (['数据绑定', '告警变色', '显示隐藏'].includes(name)) {
-      drawText(ctx, d, tvMap);
+      drawLabel(ctx, d, tvMap);
     } else if (name === '光字牌') {
       drawAnnunciator(ctx, d, tvMap);
     } else if (name === '按钮') {
@@ -338,18 +315,19 @@ const drawLine = (ctx: CanvasRenderingContext2D, points: XYPoint[]) => {
  * 原生属性 label 绘制方法
  * @param ctx
  * @param d 图元配置
+ * @param tvMap 测点数据
  */
-const fillLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
+const drawLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
   let x = d.x!;
   let y = d.y!;
   const w = d.p.width;
   const h = d.p.height;
 
   ctx.save();
-  const text = d.s?.['label'] ?? d.p.name ?? 'TEXT';
   ctx.textAlign = 'center';
   ctx.font = d.s['label.font'] ?? '16px arial, sans-serif';
 
+  // 位置
   const pos = d.s['label.position'] ?? 17;
   if (pos === 17) {
     // 中
@@ -394,7 +372,35 @@ const fillLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) =>
     ctx.textBaseline = 'middle';
     x = x + w / 2 + 2;
   }
-  ctx.fillStyle = d.s['label.color'] ?? '#000';
+
+  const tag = d.a?.['node.tag'];
+  const name = d.p.name;
+  let text = d.s?.label ?? name ?? 'TEXT';
+  let value = tag && tvMap && tvMap.get(tag) !== undefined ? tvMap.get(tag) ?? 1 : null;
+
+  if (name === '数据绑定') {
+    const labelTemp = text ?? '###.#';
+    const valueArr = labelTemp.split('.');
+    const decLen = valueArr[1] ? valueArr[1].length : 0;
+    text = value !== null ? value.toFixed(decLen) : text;
+    ctx.fillStyle = d.s?.['label.color'] ?? '#00FF00';
+  } else if (name === '告警变色') {
+    text = text ?? '告警变色';
+    const color1 = d.s?.['label.color'] ?? '#D8D8D8';
+    const color2 = d.a?.['node.color2'] ?? '#FF0000';
+    const reverse = d.a?.['node.type.switch.reverse'] ?? false;
+    if (reverse && value !== null) value = value ^ 1;
+    ctx.fillStyle = value === null ? color1 :
+      value === 1 ? color1 : color2;
+  } else if (name === '显示隐藏') {
+    const reverse = d.a?.['node.type.switch.reverse'] ?? false;
+    if (reverse && value !== null) value = value ^ 1;
+    if (value === 0) return;
+    text = text ?? '显示隐藏';
+    ctx.fillStyle = d.s?.['label.color'] ?? '#FF0000';
+  } else {
+    ctx.fillStyle = d.s['label.color'] ?? '#000';
+  }
 
   ctx.fillText(text, x, y);
   ctx.restore();
@@ -422,7 +428,7 @@ const drawAnnunciator = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPositi
   const color1 = d.a?.['node.background.color'] ?? '#00FF00';
   const color2 = d.a?.['node.background.color2'] ?? '#FF0000';
   const reverse = d.a?.['node.type.switch.reverse'] ?? false;
-  if (reverse && value) value = value ^ 1;
+  if (reverse && value !== null) value = value ^ 1;
 
   ctx.fillStyle = value === null ? color1 :
     value === 1 ? color1 : color2;
@@ -430,7 +436,7 @@ const drawAnnunciator = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPositi
   ctx.fillRect(dx, dy, w, h);
   ctx.restore();
 
-  fillLabel(ctx, d);
+  drawLabel(ctx, d);
 };
 
 /**
@@ -456,7 +462,7 @@ const drawButton = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) =
   ctx.fillRect(dx + 2, dy + 2, w - 4, h - 4);
   ctx.restore();
 
-  fillLabel(ctx, d);
+  drawLabel(ctx, d);
 };
 
 /**

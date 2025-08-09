@@ -110,7 +110,7 @@ export const staticActions = createTree<ActionRecordRaw>([
       },
     ],
   }, {
-    id: '1436644431724154881',
+    id: '1436644431724154879',
     actionId: 'diagram',
     title: '组态图',
     type: MenuTypeEnum.DIAGRAM,

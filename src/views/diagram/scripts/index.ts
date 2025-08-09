@@ -167,13 +167,7 @@ export class Diagram {
    */
   draw = (tvMap?: Map<string, number>) => {
     window.requestAnimationFrame(() => {
-
       this.dmCtx.clearRect(this.left - this.PADDING, this.top - this.PADDING, this.width, this.height);
-
-      this.dmCtx.beginPath();
-      this.dmCtx.fillStyle = '#FF4500';
-      this.dmCtx.arc(10, 10, 10, 0, 2 * Math.PI);
-      this.dmCtx.fill();
       this.dmMap.forEach(d => {
         if (d.c === 'ht.Text') {
           drawText(this.dmCtx, d, tvMap);
@@ -185,12 +179,6 @@ export class Diagram {
           drawEdge(this.dmCtx, d, this.dmMap);
         }
       });
-
-      this.dmCtx.save();
-      this.dmCtx.strokeStyle = '#00FF00';
-      this.dmCtx.lineWidth = 2;
-      this.dmCtx.strokeRect(this.left, this.top, this.right - this.left, this.bottom - this.top);
-      this.dmCtx.restore();
     });
   };
 

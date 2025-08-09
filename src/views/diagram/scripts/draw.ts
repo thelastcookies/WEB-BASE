@@ -1,95 +1,67 @@
-import type { DiagramDataWithPosition, XYPoint } from '@/types/diagram';
+import type { DiagramData, DiagramDataWithPosition, XYPoint } from '@/types/diagram';
 import type { EdgeStyle, ShapeStyle, TextStyle } from '@/types/diagram/style';
 
 const { imageMap } = useDiagramStore();
 
-const PADDING = 50;
 /**
- * 绘制组态方法
- * @param canvas
- * @param dmMap 经过预处理的图元哈希
- * @param tvMap 测点键值对
+ * 解析文件中文本的位置、对齐信息
+ * @param d
  */
-export const draw = (canvas: HTMLCanvasElement, dmMap: Map<number, DiagramDataWithPosition>, tvMap?: Map<string, number>) => {
-  window.requestAnimationFrame(() => {
-    const ctx = canvas.getContext('2d')!;
+export const deserializeText = (d: DiagramData): DiagramDataWithPosition => {
+  const textStyle = d.s as TextStyle;
 
-    const top = Number(canvas.dataset.top) ?? 0;
-    const right = Number(canvas.dataset.right) ?? 0;
-    const bottom = Number(canvas.dataset.bottom) ?? 0;
-    const left = Number(canvas.dataset.left) ?? 0;
+  let x = d.p.position.x ?? 0;
+  let y = d.p.position.y ?? 0;
 
-    const w = right - left + 2 * PADDING;
-    const h = bottom - top + 2 * PADDING;
+  const w = d.p.width ?? 100;
+  const h = d.p.height ?? 50;
 
-    ctx.clearRect(left - PADDING, top - PADDING, w, h);
+  const align = textStyle['text.align'] ?? 'left';
+  const vAlign = textStyle['text.vAlign'] ?? 'middle';
 
-    ctx.beginPath();
-    ctx.fillStyle = '#FF4500';
-    ctx.arc(10, 10, 10, 0, 2 * Math.PI);
-    ctx.fill();
-    dmMap.forEach(d => {
-      if (d.c === 'ht.Text') {
-        drawText(ctx, d, tvMap);
-      } else if (d.c === 'ht.Node') {
-        drawNode(ctx, d, tvMap);
-      } else if (d.c === 'ht.Shape') {
-        drawShape(ctx, d);
-      } else if (d.c === 'ht.Edge') {
-        drawEdge(ctx, d, dmMap);
-      }
-    });
+  // 位置修正
+  if (align === 'left' || align === 'right') {
+    x = align === 'left' ? x - w / 2 + 2 : x + w / 2 - 2;
+  }
 
-    ctx.save();
-    ctx.strokeStyle = '#00FF00';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(left, top, right - left, bottom - top);
-    ctx.restore();
-  });
+  if (vAlign == 'top' || vAlign === 'bottom') {
+    y = vAlign === 'top' ? y - h / 2 + 4 : y + h / 2 - 2;
+  } else {
+    y += 1;
+  }
+
+  return {
+    x, y, w, h, ...d,
+  };
 };
 
 /**
- * 绘制 被选择图元外框 方法
- * @param canvas
- * @param dmMap 经过预处理的图元哈希
- * @param ids 被选中图元 id 列表
+ * 解析文件中图元的大小、位置、旋转信息
+ * @param d
  */
-export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, DiagramDataWithPosition>, ids: number[]) => {
-  window.requestAnimationFrame(() => {
-    const ctx = canvas.getContext('2d')!;
+export const deserializeNode = (d: DiagramData): DiagramDataWithPosition => {
+  let x = d.p.position.x ?? 0;
+  let y = d.p.position.y ?? 0;
 
-    const top = Number(canvas.dataset.top) ?? 0;
-    const right = Number(canvas.dataset.right) ?? 0;
-    const bottom = Number(canvas.dataset.bottom) ?? 0;
-    const left = Number(canvas.dataset.left) ?? 0;
+  const w = d.p.width;
+  const h = d.p.height;
 
-    const w = right - left + 2 * PADDING;
-    const h = bottom - top + 2 * PADDING;
+  const rotation = d.p.rotation ? round(d.p.rotation, 4) : 0;
+  let angle = d.p.rotation !== 0 ?
+    rotation === round(1 / 2 * Math.PI, 4) ? (1 / 2 * Math.PI) :
+      rotation === round(Math.PI, 4) ? Math.PI :
+        rotation === round(3 / 2 * Math.PI, 4) ? (3 / 2 * Math.PI) : 0 : 0;
 
-    ctx.clearRect(left - PADDING, top - PADDING, w, h);
-
-    ctx.clearRect(left, top, right - left, bottom - top);
-
-    ctx.save();
-    ids.forEach((id) => {
-      const d = dmMap.get(id)!;
-      const x = d.x!;
-      const y = d.y!;
-      const w = d.w!;
-      const h = d.h!;
-
-      const dx = x - w / 2;
-      const dy = y - h / 2;
-
-      ctx.strokeStyle = '#00FF00';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([5, 5]);
-      ctx.strokeRect(dx - 2, dy - 2, w + 4, h + 4);
-    });
-    ctx.restore();
-  });
+  if (angle !== 0 && (angle === 1 / 2 * Math.PI || angle === 3 / 2 * Math.PI)) {
+    return {
+      x, y, h: w, w: h, angle, ...d,
+    };
+  } else {
+    return {
+      x, y, w, h, angle, ...d,
+    };
+  }
 };
-
 
 /**
  * 绘制 文本图元 的一般方法
@@ -97,7 +69,7 @@ export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, Diag
  * @param d 图元配置
  * @param tvMap 测点数据
  */
-const drawText = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
+export const drawText = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
   ctx.save();
   const textStyle = d.s as TextStyle;
 
@@ -140,7 +112,7 @@ const drawText = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvM
  * @param d 图元配置
  * @param tvMap 测点数据
  */
-const drawNode = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
+export const drawNode = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
   ctx.save();
 
   const graph = getNodeGraph(d, tvMap);
@@ -182,7 +154,7 @@ const drawNode = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvM
  * @param d
  * @param img
  */
-const drawImage = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, img: HTMLImageElement | ImageBitmap) => {
+export const drawImage = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, img: HTMLImageElement | ImageBitmap) => {
   const nodeAttr = d.a;
 
   const x = d.x!;
@@ -228,7 +200,7 @@ const drawImage = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, im
  * @param ctx
  * @param d 图元配置
  */
-const drawShape = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
+export const drawShape = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
   const points = d.p.points?.__a;
   if (!points || !points.length) return;
 
@@ -253,7 +225,7 @@ const drawShape = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) =>
  * @param d 图元配置
  * @param map 图元配置 Map
  */
-const drawEdge = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, map: Map<number, DiagramDataWithPosition>) => {
+export const drawEdge = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, map: Map<number, DiagramDataWithPosition>) => {
   ctx.save();
 
   const edgeStyle = d.s as EdgeStyle;
@@ -307,7 +279,7 @@ const drawEdge = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, map
  * @param ctx
  * @param points 坐标点数组
  */
-const drawLine = (ctx: CanvasRenderingContext2D, points: XYPoint[]) => {
+export const drawLine = (ctx: CanvasRenderingContext2D, points: XYPoint[]) => {
   ctx.save();
   ctx.beginPath();
   for (let i = 0; i < points.length; i++) {
@@ -326,7 +298,7 @@ const drawLine = (ctx: CanvasRenderingContext2D, points: XYPoint[]) => {
  * @param d 图元配置
  * @param tvMap 测点数据
  */
-const drawLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
+export const drawLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
   let x = d.x!;
   let y = d.y!;
   const w = d.p.width;
@@ -422,7 +394,7 @@ const drawLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tv
  * @param d 图元配置
  * @param tvMap 测点数据
  */
-const drawAnnunciator = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
+export const drawAnnunciator = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
   const x = d.x!;
   const y = d.y!;
   const w = d.p.width;
@@ -453,7 +425,7 @@ const drawAnnunciator = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPositi
  * @param ctx
  * @param d 图元配置
  */
-const drawButton = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
+export const drawButton = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
   const x = d.x!;
   const y = d.y!;
   const w = d.p.width;
@@ -479,7 +451,7 @@ const drawButton = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) =
  * @param ctx
  * @param d 图元配置
  */
-const drawTable = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
+export const drawTable = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) => {
   const x = d.x!;
   const y = d.y!;
   const w = d.p.width;
@@ -557,7 +529,7 @@ const drawTable = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition) =>
  * @param d 图元配置
  * @param tvMap 测点数据
  */
-const drawProgressBar = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
+export const drawProgressBar = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
   const x = d.x!;
   const y = d.y!;
   const w = d.p.width;

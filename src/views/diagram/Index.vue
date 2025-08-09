@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs';
-import type { DiagramDataWithPosition } from '@/types/diagram';
+import type { Diagram as DiagramType } from '@/views/diagram/scripts';
 
 const route = useRoute();
 const href = computed(() => (route?.meta as any)?.href);
@@ -14,9 +14,9 @@ const goForward = () => {
 
 const dmContainer = ref<HTMLElement>();
 const dmCanvas = ref<HTMLCanvasElement>();
-const dmMap = ref<Map<number, DiagramDataWithPosition>>();
 const slCanvas = ref<HTMLCanvasElement>();
 
+const diagram = ref<DiagramType>();
 // const loading = ref(true);
 
 const nodeTagArr = ref<string[]>([]);
@@ -42,14 +42,9 @@ const load = async () => {
     const res = await fetch(preprocessHref(route.query?.d ?? href.value));
     const json = await res.json();
 
-    dmMap.value = deserializeDiagramFile(json);
-
-    const boundary = getDiagramBoundary(dmMap.value);
-    init(boundary);
-    fit();
-    // draw(dmCanvas.value!, dmMap.value!);
-
-    nodeTagArr.value = getDiagramTags(dmMap.value);
+    diagram.value = new Diagram(json);
+    diagram.value.fit();
+    nodeTagArr.value = diagram.value.getTags();
 
     // 请求实时数据并定时
     resume();
@@ -76,7 +71,7 @@ const { pause, resume } = useIntervalFn(() => {
 const getRealTimeData = async (tags: string[]) => {
   const tvMap = await getRtData(tags);
   // console.log(tvMap);
-  draw(dmCanvas.value!, dmMap.value!, tvMap);
+  diagram.value!.draw(tvMap);
 };
 
 /**
@@ -92,18 +87,18 @@ const getHistoricalData = async () => {
 
   if (data) {
     timeSliderData.value = [...data].map(it => it[1]);
-    draw(dmCanvas.value!, dmMap.value!, timeSliderData.value[0]);
+    diagram.value!.draw(timeSliderData.value[0]);
   }
 };
 
 watch(timeSliderValue, idx => {
   if (timeSliderData.value) {
-    draw(dmCanvas.value!, dmMap.value!, timeSliderData.value[idx]);
+    diagram.value!.draw(timeSliderData.value[idx]);
   }
 });
 
 const resize = useDebounceFn(() => {
-  fit();
+  diagram.value!.fit();
 }, 200);
 
 useResizeObserver(dmContainer, () => {
@@ -123,12 +118,12 @@ const tagsList = ref<string[]>();
 const { selections } = storeToRefs(useDiagramStore());
 
 const showTrendModal = () => {
-  tagsList.value = getDiagramTags(selections.value);
+  tagsList.value = diagram.value?.getTags(selections.value);
   modalOpen.value = true;
 };
 
 const handleMouseDown = (e: MouseEvent) => {
-  setSelection(e, dmMap.value!);
+  diagram.value!.setSelection(e);
 };
 
 const handleContextClick = (key: number) => {

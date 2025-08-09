@@ -3,6 +3,7 @@ import type { EdgeStyle, ShapeStyle, TextStyle } from '@/types/diagram/style';
 
 const { imageMap } = useDiagramStore();
 
+const PADDING = 50;
 /**
  * 绘制组态方法
  * @param canvas
@@ -18,7 +19,10 @@ export const draw = (canvas: HTMLCanvasElement, dmMap: Map<number, DiagramDataWi
     const bottom = Number(canvas.dataset.bottom) ?? 0;
     const left = Number(canvas.dataset.left) ?? 0;
 
-    ctx.clearRect(left, top, right - left, bottom - top);
+    const w = right - left + 2 * PADDING;
+    const h = bottom - top + 2 * PADDING;
+
+    ctx.clearRect(left - PADDING, top - PADDING, w, h);
 
     ctx.beginPath();
     ctx.fillStyle = '#FF4500';
@@ -58,6 +62,11 @@ export const drawSelection = (canvas: HTMLCanvasElement, dmMap: Map<number, Diag
     const right = Number(canvas.dataset.right) ?? 0;
     const bottom = Number(canvas.dataset.bottom) ?? 0;
     const left = Number(canvas.dataset.left) ?? 0;
+
+    const w = right - left + 2 * PADDING;
+    const h = bottom - top + 2 * PADDING;
+
+    ctx.clearRect(left - PADDING, top - PADDING, w, h);
 
     ctx.clearRect(left, top, right - left, bottom - top);
 

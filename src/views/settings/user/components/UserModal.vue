@@ -39,14 +39,19 @@ const formData = ref({
 const rules: Record<string, Rule[]> = {
   UserName: [{ required: true, message: '账号不可为空' }],
   RealName: [{ required: true, message: '姓名不可为空' }],
-  RoleNames: [{ required: true, message: '角色不可为空' }],
+  RoleIdList: [{ required: true, message: '角色不可为空' }],
 };
 
 const handleSubmit = async () => {
   loading.value = true;
   try {
     await formRef.value?.validate();
-    const { Success, Msg } = await saveUser(formData.value);
+    const form = merge({}, formData.value, {
+      RoleIdList: [formData.value.RoleIdList],
+    }, props.type === EditEnum.ADD ? {
+      newPwd: '123456',
+    } : {});
+    const { Success, Msg } = await saveUser(form);
     if (Success) {
       message.success('保存成功');
       emit('submit');
@@ -128,11 +133,11 @@ getRoles();
       <a-form-item label="生日" name="BirthdayText">
         <a-input v-model:value="formData.BirthdayText" />
       </a-form-item>
-      <a-form-item label="角色" name="RoleNames">
+      <a-form-item label="角色" name="RoleIdList">
         <a-select allow-clear
                   show-search
                   option-filter-prop="label"
-                  v-model:value="formData.RoleNames"
+          v-model:value="formData.RoleIdList"
                   :options="roleList"
         />
       </a-form-item>

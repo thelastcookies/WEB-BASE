@@ -4,8 +4,7 @@ import type { ActionRecordRaw } from '@/types/action';
 import type { RouteLocationNormalized } from 'vue-router';
 import type { TreeNode } from '@/utils/tree';
 
-const actionStore = useActionStore();
-const { actionTree } = storeToRefs(actionStore);
+const { actionTree } = storeToRefs(useActionStore());
 
 const breadcrumb = ref([] as TreeNode<ActionRecordRaw>[]);
 const currentRoute = ref<RouteLocationNormalized>();

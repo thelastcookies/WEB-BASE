@@ -3,14 +3,7 @@ import type { Dayjs } from 'dayjs';
 import type { Diagram as DiagramType } from '@/views/diagram/scripts';
 
 const route = useRoute();
-const href = computed(() => (route?.meta as any)?.href);
-const name = computed(() => (route?.meta as any)?.name);
-
-// 返回按钮
-const backBtnVisible = ref(false);
-const goForward = () => {
-  router.go(-1);
-};
+const href = computed(() => route.query?.d as string);
 
 const dmContainer = ref<HTMLElement>();
 const dmCanvas = ref<HTMLCanvasElement>();
@@ -37,9 +30,7 @@ const preprocessHref = (href: string) => {
 // 加载组态文件
 const load = async () => {
   try {
-    // if (window.history.state.back) backBtnVisible.value = true;
-    const route = useRoute();
-    const res = await fetch(preprocessHref(route.query?.d ?? href.value));
+    const res = await fetch(preprocessHref(href.value));
     const json = await res.json();
 
     diagram.value = new Diagram(json);
@@ -49,7 +40,11 @@ const load = async () => {
     // 请求实时数据并定时
     resume();
   } catch (_) {
-    message.error('加载文件失败: ' + (name.value || route.query?.d || href.value));
+    if (!href.value) {
+      message.error(`未指定加载文件`);
+    } else {
+      message.error(`加载文件失败: ${href.value}`);
+    }
   }
 };
 
@@ -98,7 +93,7 @@ watch(timeSliderValue, idx => {
 });
 
 const resize = useDebounceFn(() => {
-  diagram.value!.fit();
+  diagram.value?.fit();
 }, 200);
 
 useResizeObserver(dmContainer, () => {
@@ -122,8 +117,16 @@ const showTrendModal = () => {
   modalOpen.value = true;
 };
 
-const handleMouseDown = (e: MouseEvent) => {
-  diagram.value!.setSelection(e);
+const handleMouseDown = async (e: MouseEvent) => {
+  const graph = await diagram.value!.setSelection(e);
+  const href = graph.a?.['button.link'];
+  if (!href) return;
+  await routeTo({
+    name: 'DIAGRAM',
+    query: {
+      d: href,
+    },
+  });
 };
 
 const handleContextClick = (key: number) => {
@@ -158,12 +161,6 @@ const handleContextClick = (key: number) => {
         <canvas ref="dmCanvas" id="dm-canvas" class="canvas z-5"></canvas>
       </div>
     </DiagramContextMenu>
-    <a-button v-if="backBtnVisible"
-      class="absolute top-6 left-6 px-2 z-ant.l1"
-      @click="goForward"
-    >
-      <BaseIcon icon='i-mdi-arrow-left'></BaseIcon>
-    </a-button>
     <DiagramTimeSlider v-if="timeSliderOpen" v-model:value="timeSliderValue"
       v-model:time-range="hisTimeRange"></DiagramTimeSlider>
     <DiagramDetail v-model:open="detailOpen"></DiagramDetail>

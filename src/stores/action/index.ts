@@ -20,7 +20,8 @@ export const useActionStore = defineStore('action', () => {
     const loadActionType = import.meta.env.APP_LOAD_ACTION_TYPE;
     const getActionFunc = loadActionType === LoadActionTypeEnum.BACKEND ? getActionsFromApi : getActionsFromConfig;
     // 获取 Actions 配置并保存
-    actionTree.value = await getActionFunc();
+    const actions = await getActionFunc();
+    actionTree.value = [...actions, ...silenceActions];
     return actionTree.value;
   };
 

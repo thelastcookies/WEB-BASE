@@ -216,30 +216,35 @@ export class Diagram {
    * @param e
    */
   setSelection = (e: MouseEvent) => {
-    e.stopPropagation();
-    let x = e.offsetX;
-    let y = e.offsetY;
+    return new Promise<DiagramDataWithPosition>(resolve => {
+      e.stopPropagation();
+      let x = e.offsetX;
+      let y = e.offsetY;
 
-    // 鼠标点击位置修正
-    x += Number(this.left) - this.PADDING;
-    y += Number(this.top) - this.PADDING;
+      // 鼠标点击位置修正
+      x += Number(this.left) - this.PADDING;
+      y += Number(this.top) - this.PADDING;
 
-    const ids = controlKey.value || metaKey.value ? [...selectionIds.value] : [];
-    // 检查是否点击了某个对象
-    for (const [id, d] of this.dmMap) {
-      const name = d.p.name;
-      const graph = graphMap.get(name);
-      if (!graph || ['static', 'table'].includes(graph.type)) continue;
-      const dx = d.x! - d.w! / 2;
-      const dy = d.y! - d.h! / 2;
-      if (x >= dx &&
-        x <= dx + d.w! &&
-        y >= dy &&
-        y <= dy + d.h!) {
-        ids.push(id);
+      const ids = controlKey.value || metaKey.value ? [...selectionIds.value] : [];
+      // 检查是否点击了某个对象
+      for (const [id, d] of this.dmMap) {
+        const name = d.p.name;
+        const graph = graphMap.get(name);
+        if (!graph || ['static', 'table'].includes(graph.type)) continue;
+        const dx = d.x! - d.w! / 2;
+        const dy = d.y! - d.h! / 2;
+        if (x >= dx &&
+          x <= dx + d.w! &&
+          y >= dy &&
+          y <= dy + d.h!) {
+          if (graph.type === 'button') {
+            return resolve(d);
+          }
+          ids.push(id);
+        }
       }
-    }
-    this.drawSelection(ids);
-    selections.value = ids.map(id => this.dmMap.get(id)!);
+      this.drawSelection(ids);
+      selections.value = ids.map(id => this.dmMap.get(id)!);
+    });
   };
 }

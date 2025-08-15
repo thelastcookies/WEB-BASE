@@ -48,5 +48,6 @@ export default defineConfig({
     'i-mdi-image-filter-drama-outline',
     'i-mdi-engine-outline',
     'i-mdi-clipboard-list-outline',
+    'i-mdi-file-outline',
   ],
 });

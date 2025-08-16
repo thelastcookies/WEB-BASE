@@ -12,7 +12,7 @@ const currentRoute = ref<RouteLocationNormalized>();
 // 订阅路由变化，设置面包屑
 listenRouteChange((route: RouteLocationNormalized) => {
   let name: RecordName;
-  if (route.redirectedFrom) {
+  if (route.redirectedFrom && route.redirectedFrom.name !== '404') {
     if (route.name === 'DIAGRAM') {
       name = route.redirectedFrom.name as RecordName;
     } else {

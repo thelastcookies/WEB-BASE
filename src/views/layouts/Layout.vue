@@ -18,6 +18,8 @@ watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
   immediate: true,
 });
 
+// TODO: KeepAlive 配置实装
+
 </script>
 <template>
   <a-layout w-full h-full>
@@ -32,7 +34,8 @@ watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
         <SidebarMenu :menu="menu"></SidebarMenu>
       </a-layout-sider>
       <a-layout>
-        <PageHeader v-if="deviceType === 'desktop' && layoutMode.includes('PAGE_HEADER')"></PageHeader>
+        <Tabs v-if="deviceType === 'desktop' && layoutMode.includes('TAB')"></Tabs>
+        <PageHeader v-else-if="deviceType === 'desktop' && layoutMode.includes('PAGE_HEADER')"></PageHeader>
         <a-layout-content overflow-x-hidden overflow-y-auto>
           <RouterView v-slot="{ Component, route }">
             <Transition appear name="slide-fade" mode="out-in">

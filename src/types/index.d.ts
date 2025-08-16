@@ -46,20 +46,21 @@ export interface ReadonlyRecordable<T = any> {
 }
 
 export interface RouteToRecord {
-  name: RecordName;
+  name?: RecordName;
+  path?: string;
   title?: string;
   type?: string;
   params?: Record<string, any>;
   query?: Record<string, any>;
 }
 
-export type RouteToRecordRaw = Key | RecordName | RouteToRecord;
+export type RouteToRecordRaw = RecordName | RouteToRecord;
 
 /**
  * 用于 Antdv 菜单
  */
 export interface MenuTreeNode {
-  key: Key | RecordName;
+  key: RecordName;
   label: string;
   title?: string;
   icon?: string | (() => VNodeChild);

@@ -1,4 +1,4 @@
-import type { Key, RecordName } from '@/types';
+import type { RecordName } from '@/types';
 import type { ActionPermission, ActionRecordRaw } from '@/types/action';
 import type { ActionResponseRecord, PermissionRecord } from '@/api/admin/action/types';
 import type { TreeNode } from '@/utils/tree';
@@ -45,7 +45,7 @@ export const useActionStore = defineStore('action', () => {
  */
 export const findAction = (
   actions: TreeNode<ActionRecordRaw>[],
-  key: Key | RecordName,
+  key: RecordName,
   field: 'id' | 'actionId' | 'title' = 'actionId',
 ): TreeNode<ActionRecordRaw> | undefined => {
   let action: TreeNode<ActionRecordRaw>;
@@ -75,7 +75,7 @@ export const findAction = (
  */
 export const findActionAncestorChain = (
   actions: TreeNode<ActionRecordRaw>[],
-  key: Key | RecordName,
+  key: RecordName,
   field: 'id' | 'actionId' | 'title' = 'actionId',
 ): TreeNode<ActionRecordRaw>[] | undefined => {
   const action = findAction(actions, key, field)!;

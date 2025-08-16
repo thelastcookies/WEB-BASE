@@ -9,16 +9,16 @@ export const generateRouterConf = (actionTree: TreeNode<ActionRecordRaw>[]) => {
   // 生成路由配置
   const routes = generateRoutes(actionTree);
   // 获取首页配置
-  const homePageId = import.meta.env.APP_HOMEPAGE_ID;
-  let homePage: TreeNode<ActionRecordRaw> | undefined;
-  if (!homePageId) {
+  const homepageId = import.meta.env.APP_HOMEPAGE_ID;
+  let homepage: TreeNode<ActionRecordRaw> | undefined;
+  if (!homepageId) {
     console.info(`Router.generate "generateRouterConf": Empty configuration item 'APP_HOMEPAGE_ID'.`);
-    homePage = findDescendantWithUrlDefined(actionTree[0]);
+    homepage = findDescendantWithUrlDefined(actionTree[0]);
   } else {
-    homePage = findAction(actionTree, homePageId);
+    homepage = findAction(actionTree, homepageId);
   }
-  if (!homePage) {
-    console.error(`Router.generate 'generateRouterConf': Cannot find homepage by id: ${homePageId}.`);
+  if (!homepage) {
+    console.error(`Router.generate 'generateRouterConf': Cannot find homepage by id: ${homepageId}.`);
   }
 
   // 为 Layout 添加指向首页的 redirect
@@ -27,7 +27,7 @@ export const generateRouterConf = (actionTree: TreeNode<ActionRecordRaw>[]) => {
   router.addRoute({
     path: '/',
     name: 'Layout',
-    redirect: { name: homePage!.actionId as RouteRecordName },
+    redirect: { name: homepage!.actionId as RouteRecordName },
     component: basicRouteMap.Layout,
     children: routes,
   });
@@ -99,8 +99,11 @@ const actionToRoute = (action: TreeNode<ActionRecordRaw>): RouteRecordRaw => {
       route.redirect = { name: 'DIAGRAM', query: { d: action.resource } };
     }
   }
+  route.meta = merge(route.meta, {
+    title: action.title,
+  });
   if ('meta' in action) {
-    route.meta = Object.assign({}, route.meta, action.meta);
+    route.meta = merge({}, route.meta, action.meta);
   }
   return route;
 };

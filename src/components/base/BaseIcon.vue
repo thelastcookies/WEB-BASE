@@ -7,10 +7,11 @@
 import type { VNodeChild } from 'vue';
 
 const props = withDefaults(defineProps<{
-  icon: string | ((...args: any[]) => VNodeChild),
+  icon?: string | ((...args: any[]) => VNodeChild),
   type?: 'iconify' | 'image' | 'logo',
   size?: number | string
 }>(), {
+  icon: '',
   // 单位：rem
   size: 1,
   type: 'iconify',

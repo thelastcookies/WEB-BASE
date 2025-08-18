@@ -216,7 +216,7 @@ const handleDelete = async () => {
           </a-col>
           <a-col :span="12">
             <a-form-item label="图标配置" name="Icon">
-              <a-input v-model:value="formData.Icon" placeholder="请输入" />
+              <IconPicker v-model:value="formData.Icon" />
             </a-form-item>
           </a-col>
         </a-row>

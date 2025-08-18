@@ -112,9 +112,13 @@ const filterTreeNode = (node: EventDataNode) => {
       :filter-tree-node="filterTreeNode"
       @expand="onExpand"
       block-node
+      show-icon
     >
+      <!--<template #icon="{ Icon }">-->
+      <!--<BaseIcon v-if="Icon" :icon="Icon" />-->
+      <!--</template>-->
       <template #title="{ Name }">
-        <span class="flex pl-1 tree-node-title">
+        <span class="pl-0.5">
           <span v-if="Name && searchValue && Name.indexOf(searchValue) > -1">
             {{ Name.substring(0, Name.indexOf(searchValue)) }}
             <span class="c-ant.error">{{ searchValue }}</span>

@@ -70,7 +70,7 @@ export interface DiagramBasic {
   };
 }
 
-export type GraphType = 'text' | 'static' | 'table' | 'switch' | 'value' | 'button' | 'ctmp' | 'CB';
+export type GraphType = 'text' | 'static' | 'shape' | 'table' | 'switch' | 'value' | 'button' | 'ctmp' | 'CB';
 
 export interface GraphConfig {
   name: string;

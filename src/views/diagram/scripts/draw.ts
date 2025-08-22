@@ -1,5 +1,6 @@
 import type { DiagramData, DiagramDataWithPosition, XYPoint } from '@/types/diagram';
-import type { EdgeStyle, ShapeStyle, TextStyle } from '@/types/diagram/style';
+import type { EdgeStyle, TextStyle } from '@/types/diagram/style';
+import type { NodeShapeAttr } from '@/types/diagram/attr';
 
 const { imageMap } = useDiagramStore();
 
@@ -204,17 +205,23 @@ export const drawShape = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosit
   const points = d.p.points?.__a;
   if (!points || !points.length) return;
 
-  const shapeStyle = d.s as ShapeStyle;
+  const shapeStyle = d.s;
+  const shapeAttr = d.a as NodeShapeAttr;
+  const isClosed = shapeAttr['node.shape.isClosed'];
 
   ctx.save();
   ctx.strokeStyle = shapeStyle['shape.border.color'] ?? '#FF0000';
   ctx.lineWidth = shapeStyle['shape.border.width'] ?? 2;
-  drawLine(ctx, points);
+  const path = drawLine(ctx, points, isClosed);
 
   if (shapeStyle['shape.dash']) {
     ctx.strokeStyle = shapeStyle['shape.dash.color'] ?? '#000';
     ctx.setLineDash(shapeStyle['shape.dash.pattern'] ?? [8, 8]);
-    drawLine(ctx, points);
+    drawLine(ctx, points, isClosed);
+  }
+  if (shapeStyle['shape.background']) {
+    ctx.fillStyle = shapeStyle['shape.background'] ?? '#000';
+    ctx.fill(path!);
   }
   ctx.restore();
 };
@@ -278,18 +285,23 @@ export const drawEdge = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPositi
  * 绘制 line 的一般方法
  * @param ctx
  * @param points 坐标点数组
+ * @param isClosed 是否闭合路径
  */
-export const drawLine = (ctx: CanvasRenderingContext2D, points: XYPoint[]) => {
+export const drawLine = (ctx: CanvasRenderingContext2D, points: XYPoint[], isClosed?: boolean): Path2D | undefined => {
+  if (!points.length) return;
   ctx.save();
   ctx.beginPath();
+  const path = new Path2D();
+  path.moveTo(points[0].x, points[0].y);
   for (let i = 0; i < points.length; i++) {
-    ctx.moveTo(points[i].x, points[i].y);
     if (i + 1 < points.length) {
-      ctx.lineTo(points[i + 1].x, points[i + 1].y);
+      path.lineTo(points[i + 1].x, points[i + 1].y);
     }
   }
-  ctx.stroke();
+  if (isClosed) path.closePath();
+  ctx.stroke(path);
   ctx.restore();
+  return path;
 };
 
 /**

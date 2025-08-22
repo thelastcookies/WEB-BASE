@@ -1,5 +1,6 @@
 export type DiagramAttr =
   NodeLabelAttr
+  & NodeShapeAttr
   & NodeUnitAttr
   & ButtonLinkAttr
   & NodeColorAttr
@@ -21,6 +22,10 @@ export type DiagramAttr =
 
 export interface NodeLabelAttr {
   'node.label'?: string;
+}
+
+export interface NodeShapeAttr {
+  'node.shape.isClosed'?: boolean;
 }
 
 export interface NodeUnitAttr {

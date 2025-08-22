@@ -64,6 +64,9 @@ export class Diagram {
     this.right = right;
     this.bottom = bottom;
     this.left = left;
+
+    this.draw();
+    this.fit();
   }
 
   fit() {
@@ -85,6 +88,7 @@ export class Diagram {
       // 基于高度适配
       scale *= ph / this.height;
     }
+    scale = scale > 2.5 ? 2.5 : scale;
     this.scale = scale;
 
     this.dmCanvas.style.scale = `${scale}`;

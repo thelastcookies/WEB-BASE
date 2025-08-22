@@ -34,7 +34,6 @@ const load = async () => {
     const json = await res.json();
 
     diagram.value = new Diagram(json);
-    diagram.value.fit();
     nodeTagArr.value = diagram.value.getTags();
 
     // 请求实时数据并定时

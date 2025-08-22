@@ -16,14 +16,14 @@ const graphConfig: GraphConfig[] = [
   { name: '线路交叉点', type: 'static', image: 'symbols/lines/线路交叉点.svg' },
   { name: '箭头', type: 'static', image: 'symbols/lines/箭头.svg' },
 
-  { name: '1/4圆弧', type: 'static', image: 'symbols/basic/4分之1圆弧.svg' },
-  { name: '1/2圆弧', type: 'static', image: 'symbols/basic/2分之1圆弧.svg' },
-  { name: '3/4圆弧', type: 'static', image: 'symbols/basic/4分之3圆弧.svg' },
-  { name: '圆形', type: 'static', image: 'symbols/basic/圆形.svg' },
-  { name: '圆角矩形', type: 'static', image: 'symbols/basic/圆角矩形.svg' },
-  { name: '矩形', type: 'static', image: 'symbols/basic/矩形.svg' },
-  { name: '三角形', type: 'static', image: 'symbols/basic/三角形.svg' },
-  { name: '梯形', type: 'static', image: 'symbols/basic/梯形.svg' },
+  { name: '1/4圆弧', type: 'shape' },
+  { name: '1/2圆弧', type: 'shape' },
+  { name: '3/4圆弧', type: 'shape' },
+  { name: '圆形', type: 'shape' },
+  { name: '圆角矩形', type: 'shape' },
+  { name: '矩形', type: 'shape' },
+  { name: '三角形', type: 'shape' },
+  { name: '梯形', type: 'shape' },
 
   {
     name: '开关', type: 'switch',
@@ -171,21 +171,24 @@ const graphConfig: GraphConfig[] = [
   { name: '静态开关模件', type: 'static', image: 'symbols/new-energy/static/静态开关模件.svg' },
   { name: '调压稳压器', type: 'static', image: 'symbols/new-energy/static/调压稳压器.svg' },
   { name: '风机模型', type: 'static', image: 'symbols/new-energy/static/风机模型.svg' },
+
+  // 火电
+  { name: '脱硝反应器', type: 'static', image: 'symbols/thermal-power/static/脱硝反应器.svg' },
 ];
 
 export const graphMap: Map<string, GraphConfig> = new Map(graphConfig.map(item => [item.name, item]));
 
-export const getNodeGraph = (d: DiagramData, map?: Map<string, number>): NodeGraph | undefined => {
+export const getNodeGraph = (d: DiagramData, map?: Map<string, number>): NodeGraph | GraphConfig => {
   const graph = graphMap.get(d.p.name)!;
   if (graph?.image) {
-    return { src: url + graph.image };
+    return { ...graph, src: url + graph.image };
   } else if (graph?.images) {
     if (graph.type === 'switch') {
       const tag = d.a?.['node.tag'] ?? null;
       let v = tag ? getTagValue(tag, map) : 1;
       const reverse = d.a?.['node.type.switch.reverse'] ?? false;
       if (reverse) v = v ^ 1;
-      return { src: url + graph.images![v] };
+      return { ...graph, src: url + graph.images![v] };
     } else if (graph.type === 'ctmp' || graph.type === 'CB') {
       // 断路器组合与双合分测点
       const tag1 = d.a?.['node.tag.cmp'] ?? d.a?.['node.tag.CB'] ?? null;
@@ -193,27 +196,29 @@ export const getNodeGraph = (d: DiagramData, map?: Map<string, number>): NodeGra
       let v1 = tag1 ? getTagValue(tag1, map) : 1;
       let v2 = tag2 ? getTagValue(tag2, map) : 1;
       let v = parseInt('' + v1 + v2, 2);
-      return { src: url + graph.images![v] };
+      return { ...graph, src: url + graph.images![v] };
     } else if (graph.type === 'static') {
       // 静态图元最后处理
       if (d.a?.['node.direction']) {
         // 上右下左
         const dAttr = d.a['node.direction'];
         const i = dAttr === 'up' ? 0 : dAttr === 'right' ? 1 : dAttr === 'down' ? 2 : dAttr === 'left' ? 3 : 0;
-        return { src: url + graph.images[i] };
+        return { ...graph, src: url + graph.images[i] };
       } else if (d.a?.['node.direction.vertical']) {
         // 上下
         const dAttr = d.a['node.direction.vertical'];
         const i = dAttr === 'up' ? 0 : dAttr === 'down' ? 1 : 0;
-        return { src: url + graph.images[i] };
+        return { ...graph, src: url + graph.images[i] };
       } else if (d.a?.['node.direction.horizontal']) {
         // 右左
         const dAttr = d.a['node.direction.horizontal'];
         const i = dAttr === 'right' ? 0 : dAttr === 'left' ? 1 : 0;
-        return { src: url + graph.images[i] };
+        return { ...graph, src: url + graph.images[i] };
       }
     }
-    return { src: url + graph.images[0] };
+    return { ...graph, src: url + graph.images[0] };
+  } else {
+    return graph;
   }
 };
 

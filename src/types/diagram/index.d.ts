@@ -79,7 +79,7 @@ export interface GraphConfig {
   images?: string[];
 }
 
-export interface NodeGraph {
+export interface NodeGraph extends GraphConfig {
   src: string;
 }
 

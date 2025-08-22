@@ -1,4 +1,4 @@
-import type { DiagramData, DiagramDataWithPosition, XYPoint } from '@/types/diagram';
+import type { DiagramData, DiagramDataWithPosition, NodeGraph, XYPoint } from '@/types/diagram';
 import type { EdgeStyle, TextStyle } from '@/types/diagram/style';
 import type { NodeShapeAttr } from '@/types/diagram/attr';
 
@@ -117,8 +117,9 @@ export const drawNode = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPositi
   ctx.save();
 
   const graph = getNodeGraph(d, tvMap);
-  if (graph) {
-    const { src } = graph;
+  if ((graph as NodeGraph).src) {
+    // 图片图元
+    const { src } = graph as NodeGraph;
     if (imageMap.has(src)) {
       drawImage(ctx, d, imageMap.get(src)!);
     } else {
@@ -132,17 +133,25 @@ export const drawNode = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPositi
       };
     }
   } else {
-    const name = d.p.name;
-    if (['数据绑定', '告警变色', '显示隐藏'].includes(name)) {
+    // 手绘图元
+    const name = graph.name;
+    const type = graph.type;
+    if (type === 'text') {
       drawLabel(ctx, d, tvMap);
-    } else if (name === '光字牌') {
-      drawAnnunciator(ctx, d, tvMap);
-    } else if (name === '按钮') {
+    } else if (type === 'shape') {
+      drawGeometric(ctx, d, tvMap);
+    } else if (type === 'switch') {
+      if (name === '光字牌') {
+        drawAnnunciator(ctx, d, tvMap);
+      }
+    } else if (type === 'value') {
+      if (name === '进度条') {
+        drawProgressBar(ctx, d, tvMap);
+      }
+    } else if (type === 'button') {
       drawButton(ctx, d);
-    } else if (name === '表格') {
+    } else if (type === 'table') {
       drawTable(ctx, d);
-    } else if (name === '进度条') {
-      drawProgressBar(ctx, d, tvMap);
     }
   }
 
@@ -221,6 +230,52 @@ export const drawShape = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosit
   }
   if (shapeStyle['shape.background']) {
     ctx.fillStyle = shapeStyle['shape.background'] ?? '#000';
+    ctx.fill(path!);
+  }
+  ctx.restore();
+};
+
+/**
+ * 绘制 几何图形 的一般方法
+ * @param ctx
+ * @param d 图元配置
+ * @param tvMap 测点数据
+ */
+const drawGeometric = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosition, tvMap?: Map<string, number>) => {
+  let points: XYPoint[] = [];
+  // TODO: 完善图形绘制
+  if (d.p.name === '1/4圆弧') {
+  } else if (d.p.name === '1/2圆弧') {
+  } else if (d.p.name === '3/4圆弧') {
+  } else if (d.p.name === '圆形') {
+  } else if (d.p.name === '圆角矩形') {
+  } else if (d.p.name === '矩形') {
+    const p = d.p.position;
+    const w = d.p.width;
+    const h = d.p.height;
+    const dx = p.x - w / 2;
+    const dy = p.y - h / 2;
+    points = [
+      { x: dx, y: dy },
+      { x: dx + w, y: dy },
+      { x: dx + w, y: dy + h },
+      { x: dx, y: dy + h },
+    ];
+  } else if (d.p.name === '三角形') {
+  } else if (d.p.name === '梯形') {
+  }
+  if (!points.length) return;
+
+  const nodeAttr = d.a;
+
+  ctx.save();
+
+  ctx.strokeStyle = nodeAttr?.['node.border.color'] ?? '#FF0000';
+  ctx.lineWidth = nodeAttr?.['node.border.width'] ?? 2;
+  const path = drawLine(ctx, points, true);
+
+  if (nodeAttr?.['node.background.color']) {
+    ctx.fillStyle = nodeAttr?.['node.background.color'] ?? 'rgba(0, 0, 0, 0)';
     ctx.fill(path!);
   }
   ctx.restore();

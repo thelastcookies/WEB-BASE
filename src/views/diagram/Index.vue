@@ -65,7 +65,7 @@ const { pause, resume } = useIntervalFn(() => {
 const getRealTimeData = async (tags: string[]) => {
   const tvMap = await getRtData(tags);
   // console.log(tvMap);
-  diagram.value!.draw(tvMap);
+  diagram.value!.setTagValue(tvMap);
 };
 
 /**
@@ -81,13 +81,13 @@ const getHistoricalData = async () => {
 
   if (data) {
     timeSliderData.value = [...data].map(it => it[1]);
-    diagram.value!.draw(timeSliderData.value[0]);
+    diagram.value!.setTagValue(timeSliderData.value[0]);
   }
 };
 
 watch(timeSliderValue, idx => {
   if (timeSliderData.value) {
-    diagram.value!.draw(timeSliderData.value[idx]);
+    diagram.value!.setTagValue(timeSliderData.value[idx]);
   }
 });
 

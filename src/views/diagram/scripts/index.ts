@@ -39,6 +39,9 @@ export class Diagram {
   lastFpsUpdate: number = 0;
   fps: number = 0;
 
+  // 数据
+  valueMap: Map<string, number> | undefined;
+
   constructor(json: DiagramJson) {
     this.dmCanvas = document.getElementById('dm-canvas') as HTMLCanvasElement;
     this.slCanvas = document.getElementById('sl-canvas') as HTMLCanvasElement;
@@ -187,10 +190,9 @@ export class Diagram {
       const g = graphMap.get(graph.p.name);
       const type = g?.type;
       if (!type) return;
-      if (['text', 'switch', 'value'].includes(type)) {
-        const tag = graph.a?.['node.tag'];
-        if (tag) tags.push(tag);
-      } else if (type === 'ctmp' || type === 'CB') {
+      const tag = graph.a?.['node.tag'];
+      if (tag) tags.push(tag);
+      if (type === 'ctmp' || type === 'CB') {
         const tag1 = graph.a?.['node.tag.CB'] ?? graph.a?.['node.tag.cmp'];
         const tag2 = graph.a?.['node.tag.drawout'] ?? graph.a?.['node.tag.tmp'];
         if (tag1) tags.push(tag1);
@@ -200,17 +202,20 @@ export class Diagram {
     return tags;
   };
 
+  setTagValue(tvMap?: Map<string, number>) {
+    this.valueMap = tvMap;
+  }
+
   /**
    * 绘制组态方法
-   * @param tvMap 测点键值对
    */
-  draw = (tvMap?: Map<string, number>) => {
+  draw = () => {
     this.dmCtx.clearRect(this.left - this.PADDING, this.top - this.PADDING, this.width, this.height);
     this.dmMap.forEach(d => {
       if (d.c === 'ht.Text') {
-        drawText(this.dmCtx, d, tvMap);
+        drawText(this.dmCtx, d, this.valueMap);
       } else if (d.c === 'ht.Node') {
-        drawNode(this.dmCtx, d, tvMap);
+        drawNode(this.dmCtx, d, this.valueMap);
       } else if (d.c === 'ht.Shape') {
         drawShape(this.dmCtx, d);
       } else if (d.c === 'ht.Edge') {

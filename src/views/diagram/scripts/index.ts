@@ -30,6 +30,15 @@ export class Diagram {
 
   scale: number = 1;
 
+  // 动画
+  lastTime: number = 0;
+  animationId: number | null = null;
+
+  // 性能检测
+  frameCount: number = 0;
+  lastFpsUpdate: number = 0;
+  fps: number = 0;
+
   constructor(json: DiagramJson) {
     this.dmCanvas = document.getElementById('dm-canvas') as HTMLCanvasElement;
     this.slCanvas = document.getElementById('sl-canvas') as HTMLCanvasElement;
@@ -65,9 +74,30 @@ export class Diagram {
     this.bottom = bottom;
     this.left = left;
 
-    this.draw();
-    this.fit();
+    // this.draw();
+    // this.fit();
+    this.lastTime = performance.now();
+    this.animationId = requestAnimationFrame(this.loop);
   }
+
+  loop = (timestamp: DOMHighResTimeStamp) => {
+    // 时间增量
+    // const deltaTime = timestamp - this.lastTime;
+    this.lastTime = timestamp;
+
+    // this.draw(deltaTime);
+    this.draw();
+
+    this.animationId = requestAnimationFrame(this.loop);
+
+    this.frameCount++;
+    if (timestamp - this.lastFpsUpdate >= 1000) {
+      this.fps = this.frameCount;
+      this.frameCount = 0;
+      this.lastFpsUpdate = timestamp;
+      // console.log(`FPS: ${this.fps}`);
+    }
+  };
 
   fit() {
     // 视口宽高
@@ -109,7 +139,12 @@ export class Diagram {
 
     const edges: DiagramData[] = [];
 
-    json.d.forEach(d => {
+    json.d.sort((a, b) => {
+      // 处理层级
+      const al = a.p.layer ?? 0;
+      const bl = b.p.layer ?? 0;
+      return al - bl;
+    }).forEach(d => {
       if (d.c === 'ht.Text') {
         diagramMap.set(d.i, deserializeText(d));
       } else if (d.c === 'ht.Shape') {
@@ -170,19 +205,17 @@ export class Diagram {
    * @param tvMap 测点键值对
    */
   draw = (tvMap?: Map<string, number>) => {
-    window.requestAnimationFrame(() => {
-      this.dmCtx.clearRect(this.left - this.PADDING, this.top - this.PADDING, this.width, this.height);
-      this.dmMap.forEach(d => {
-        if (d.c === 'ht.Text') {
-          drawText(this.dmCtx, d, tvMap);
-        } else if (d.c === 'ht.Node') {
-          drawNode(this.dmCtx, d, tvMap);
-        } else if (d.c === 'ht.Shape') {
-          drawShape(this.dmCtx, d);
-        } else if (d.c === 'ht.Edge') {
-          drawEdge(this.dmCtx, d, this.dmMap);
-        }
-      });
+    this.dmCtx.clearRect(this.left - this.PADDING, this.top - this.PADDING, this.width, this.height);
+    this.dmMap.forEach(d => {
+      if (d.c === 'ht.Text') {
+        drawText(this.dmCtx, d, tvMap);
+      } else if (d.c === 'ht.Node') {
+        drawNode(this.dmCtx, d, tvMap);
+      } else if (d.c === 'ht.Shape') {
+        drawShape(this.dmCtx, d);
+      } else if (d.c === 'ht.Edge') {
+        drawEdge(this.dmCtx, d, this.dmMap);
+      }
     });
   };
 
@@ -251,4 +284,11 @@ export class Diagram {
       selections.value = ids.map(id => this.dmMap.get(id)!);
     });
   };
+
+  dispose() {
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+  }
 }

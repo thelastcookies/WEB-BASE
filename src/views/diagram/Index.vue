@@ -101,6 +101,7 @@ useResizeObserver(dmContainer, () => {
 
 tryOnUnmounted(() => {
   pause();
+  diagram.value?.dispose();
 });
 
 /**
@@ -149,7 +150,7 @@ const handleContextClick = (key: number) => {
 </script>
 
 <template>
-  <div class="w-full h-full relative of-hidden bg-gray">
+  <div class="w-full h-full relative of-hidden bg-[rgb(24,43,123)]">
     <DiagramContextMenu @menu-click="handleContextClick">
       <div ref="dmContainer"
         class="w-full relative"

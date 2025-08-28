@@ -6,6 +6,10 @@ const timeRange = defineModel<[Dayjs, Dayjs]>('timeRange', {
   default: () => [dayjs().subtract(2, 'h'), dayjs()],
 });
 
+const emit = defineEmits<{
+  (e: 'query'): void
+}>();
+
 // 接口的历史取数间隔，单位：s
 const HISTORICAL_INTERVAL = 60;
 
@@ -93,6 +97,9 @@ const formatter = (value?: number) => {
         v-model:value="timeRange"
         :placeholder="['请选择开始时间', '请选择结束时间']"
       />
+    </div>
+    <div class="w-16">
+      <a-button type="primary" @click="emit('query')">查询</a-button>
     </div>
   </div>
 </template>

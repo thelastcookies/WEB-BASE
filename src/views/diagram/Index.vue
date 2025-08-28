@@ -150,7 +150,7 @@ const handleContextClick = (key: number) => {
 </script>
 
 <template>
-  <div class="w-full h-full relative of-hidden bg-[rgb(24,43,123)]">
+  <div class="w-full h-full relative of-hidden bg-gray">
     <DiagramContextMenu @menu-click="handleContextClick">
       <div ref="dmContainer"
         class="w-full relative"
@@ -162,7 +162,7 @@ const handleContextClick = (key: number) => {
       </div>
     </DiagramContextMenu>
     <DiagramTimeSlider v-if="timeSliderOpen" v-model:value="timeSliderValue"
-      v-model:time-range="hisTimeRange"></DiagramTimeSlider>
+      v-model:time-range="hisTimeRange" @query="getHistoricalData"></DiagramTimeSlider>
     <DiagramDetail v-model:open="detailOpen"></DiagramDetail>
     <DiagramTrendModal
       v-model:open="modalOpen"

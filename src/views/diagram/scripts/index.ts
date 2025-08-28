@@ -272,7 +272,7 @@ export class Diagram {
       for (const [id, d] of this.dmMap) {
         const name = d.p.name;
         const graph = graphMap.get(name);
-        if (!graph || ['static', 'table'].includes(graph.type)) continue;
+        if (!graph || ['static', 'shape', 'table'].includes(graph.type)) continue;
         const dx = d.x! - d.w! / 2;
         const dy = d.y! - d.h! / 2;
         if (x >= dx &&

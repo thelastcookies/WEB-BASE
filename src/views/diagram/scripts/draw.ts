@@ -216,7 +216,7 @@ export const drawShape = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosit
 
   const shapeStyle = d.s;
   const shapeAttr = d.a as NodeShapeAttr;
-  const isClosed = shapeAttr['node.shape.isClosed'];
+  const isClosed = shapeAttr?.['node.shape.isClosed'];
 
   ctx.save();
   ctx.strokeStyle = shapeStyle['shape.border.color'] ?? '#FF0000';

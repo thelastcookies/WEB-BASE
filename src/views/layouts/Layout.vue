@@ -23,7 +23,7 @@ watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
 </script>
 <template>
   <a-layout w-full h-full>
-    <a-layout-header
+    <a-layout-header v-if="deviceType === 'desktop' && layoutMode.includes('HEADER')"
       class="!h-12" :class="[deviceType === 'desktop'? '!px-6': '!px-4']">
       <Header :menu="menu" :layoutMode="layoutMode" />
     </a-layout-header>

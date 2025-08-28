@@ -8,7 +8,7 @@ import {
   transformerDirectives,
 } from 'unocss';
 import presetThelastcookies from './preset';
-import icons from './icons';
+import { safelistIcons } from './icons';
 
 export default defineConfig({
   presets: [
@@ -26,6 +26,6 @@ export default defineConfig({
     transformerDirectives(),
   ],
   safelist: [
-    ...icons,
+    ...safelistIcons,
   ],
 });

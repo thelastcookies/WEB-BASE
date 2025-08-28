@@ -18,6 +18,7 @@ export const AutoImportPluginConfig: PluginOption = AutoImport({
   ],
   dts: './plugins/auto-import/auto-imports.d.ts',
   dirs: [
+    'plugins/unocss/icons*.ts',
     'src/api/**/*.ts',
     'src/constants/**/*.ts',
     'src/hooks',

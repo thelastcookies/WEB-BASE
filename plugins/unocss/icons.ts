@@ -1,4 +1,4 @@
-export default [
+export const safelistIcons = [
   // list & view
   'i-mdi-format-list-text',
   'i-mdi-format-list-numbered',

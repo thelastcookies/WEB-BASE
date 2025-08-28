@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import icons from '../../../plugins/unocss/icons.ts';
-
 const value = defineModel<string>('value', {
   default: '',
 });
@@ -10,8 +8,8 @@ const current = ref(1);
 
 const iconsFiltered = computed(() => {
   current.value = 1;
-  if (!search.value) return icons;
-  return icons.filter((i) => i.indexOf(search.value) > -1);
+  if (!search.value) return safelistIcons;
+  return safelistIcons.filter((i) => i.indexOf(search.value) > -1);
 });
 const total = computed(() => iconsFiltered.value.length);
 

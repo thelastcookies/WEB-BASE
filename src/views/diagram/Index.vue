@@ -16,6 +16,7 @@ const nodeTagArr = ref<string[]>([]);
 
 // 测点详情
 const detailOpen = ref(false);
+const detailTags = ref<string[]>([]);
 
 // 历史回放相关
 const timeSliderOpen = ref(false);
@@ -163,7 +164,7 @@ const handleContextClick = (key: number) => {
     </DiagramContextMenu>
     <DiagramTimeSlider v-if="timeSliderOpen" v-model:value="timeSliderValue"
       v-model:time-range="hisTimeRange" @query="getHistoricalData"></DiagramTimeSlider>
-    <DiagramDetail v-model:open="detailOpen"></DiagramDetail>
+    <DiagramDetail v-model:open="detailOpen" :tags="detailTags"></DiagramDetail>
     <DiagramTrendModal
       v-model:open="modalOpen"
       :tags="tagsList"

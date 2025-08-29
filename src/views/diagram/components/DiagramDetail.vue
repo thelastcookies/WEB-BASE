@@ -1,6 +1,12 @@
 <script setup lang="ts">
 const open = defineModel('open', { default: false });
 
+const props = withDefaults(defineProps<{
+  tags: string[];
+}>(), {
+  tags: () => [],
+});
+
 const domRef = ref<HTMLDivElement>();
 
 const style = ref({
@@ -18,7 +24,7 @@ const tagList = ref([{
 const { selections } = storeToRefs(useDiagramStore());
 
 watch(open, async (v) => {
-  if (!v) return;
+  if (!v && !props.tags?.length) return;
   tagList.value = [{
     tag: '',
     desc: '',
@@ -40,11 +46,10 @@ watch(open, async (v) => {
     else left = x + 10;
     style.value = { top: top + 'px', left: left + 'px' };
   });
-  const tags = getDiagramTags([d]);
-  const { data, code } = await getDesc(tags.join('|'));
+  const { data, code } = await getDesc(props.tags.join('|'));
   if (code !== 200) return;
   if (data) {
-    tagList.value = tags.map(t => {
+    tagList.value = props.tags.map(t => {
       const d = data[(t).toLowerCase()];
       if (!d) return {
         tag: '',

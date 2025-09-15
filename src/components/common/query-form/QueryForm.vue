@@ -16,12 +16,14 @@ const expand = defineModel<Boolean>('expand', { default: false });
 const props = withDefaults(defineProps<{
   fields: QueryFormField[];
   rules?: Recordable<Rule[]>;
-  itemInLine?: 2 | 3 | 4 | 6;
+  itemInLine?: 1 | 2 | 3 | 4 | 6;
   allFields?: boolean;
+  hideExpand?: boolean;
 }>(), {
   fields: () => [],
   itemInLine: 4,
   allFields: false,
+  hideExpand: false,
 });
 
 const emit = defineEmits<{
@@ -29,7 +31,7 @@ const emit = defineEmits<{
 }>();
 
 const slots = useSlots();
-const slotsCount = Object.keys(slots).filter(k => k.includes('btn')).length;
+const slotsCount = Object.keys(slots).filter(k => k !== 'btn').length;
 
 const { deviceType } = useAppStore();
 
@@ -44,8 +46,8 @@ const onFinish = () => {
     if (props.allFields) {
       props.fields.forEach((item) => {
         query[item.field] = form.value[item.field] ? form.value[item.field] :
-          ['Input', 'Radio', 'DatePicker'].includes(item.component) ? '' :
-            ['Select', 'TreeSelect', 'Checkbox', 'RangePicker'].includes(item.component) ? [] : undefined;
+          ['Input', 'Radio', 'DatePicker', 'Textarea'].includes(item.component) ? '' :
+            ['Select', 'TreeSelect', 'Checkbox', 'DateRangePicker', 'NumberRange'].includes(item.component) ? [] : undefined;
       });
       form.value = query;
     }
@@ -77,7 +79,7 @@ const btnGroupOffset = computed(() => {
 const handleClear = () => {
   formRef.value!.resetFields();
   form.value = {};
-  emit('query', {});
+  // emit('query', {});
 };
 
 </script>
@@ -107,11 +109,7 @@ const handleClear = () => {
             help=""
           >
             <template v-if="item.component === 'Input'">
-              <a-input v-bind="item.compProps" v-model:value="form[item.field]">
-                <template #suffix>
-                  <BaseIcon class="c-black/25" icon="i-mdi-magnify" />
-                </template>
-              </a-input>
+              <a-input v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
             <template v-else-if="item.component === 'Select'">
               <BaseSelect v-bind="item.compProps" v-model:value="form[item.field]" v-model:form="form" />
@@ -128,8 +126,14 @@ const handleClear = () => {
             <template v-else-if="item.component === 'DatePicker'">
               <a-date-picker v-bind="item.compProps" v-model:value="form[item.field]" />
             </template>
-            <template v-else-if="item.component === 'RangePicker'">
+            <template v-else-if="item.component === 'DateRangePicker'">
               <a-range-picker v-bind="item.compProps" v-model:value="form[item.field]" />
+            </template>
+            <template v-else-if="item.component === 'Textarea'">
+              <a-textarea v-bind="item.compProps" v-model:value="form[item.field]" />
+            </template>
+            <template v-else-if="item.component === 'NumberRange'">
+              <BaseNumberRange v-bind="item.compProps" v-model:value="form[item.field]" :field="item.field" />
             </template>
           </a-form-item>
         </a-col>
@@ -138,19 +142,20 @@ const handleClear = () => {
         <slot name="default"></slot>
       </a-col>
       <a-col class="text-right mb-3" :span="SPAN" :offset="btnGroupOffset">
-        <slot name="main-btn">
+        <slot name="btn">
           <a-button type="primary" html-type="submit">
             <BaseIcon icon="i-mdi-magnify" />
             查询
           </a-button>
+          <slot name="sub-btn">
+            <a-button class="ml-2" @click="handleClear">
+              <BaseIcon icon="i-mdi-filter-remove-outline" />
+              清空
+            </a-button>
+          </slot>
         </slot>
-        <slot name="minor-btn">
-          <a-button class="ml-2" @click="handleClear">
-            <BaseIcon icon="i-mdi-filter-remove-outline" />
-            清空
-          </a-button>
-        </slot>
-        <a-button v-if="(fields.length + slotsCount) >= ITEM_IN_LINE" type="link" @click="expand = !expand">
+        <a-button v-if="!hideExpand && (fields.length + slotsCount) >= ITEM_IN_LINE" type="link"
+          @click="expand = !expand">
           <template v-if="expand">
             <BaseIcon icon="i-mdi-chevron-up" />
             收起

@@ -2,12 +2,15 @@ import type { ColProps } from 'ant-design-vue';
 
 export type QueryFormComponentType =
   'Input'
+  | 'Textarea'
+  | 'NumberRange'
   | 'Select'
   | 'TreeSelect'
   | 'Radio'
   | 'Checkbox'
   | 'DatePicker'
-  | 'RangePicker';
+  | 'DateRangePicker'
+  ;
 
 export interface QueryFormField {
   label?: string;

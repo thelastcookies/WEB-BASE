@@ -7,8 +7,24 @@ import type { Dayjs } from 'dayjs';
 const queryFields: QueryFormField[] = [
   {
     label: '文本',
-    field: 'inputName',
+    field: 'InputName',
     component: 'Input',
+    compProps: {
+      placeholder: '请输入',
+    },
+  },
+  {
+    label: '多行文本',
+    field: 'TextareaName',
+    component: 'Textarea',
+    compProps: {
+      placeholder: '请输入',
+    },
+  },
+  {
+    label: '数字范围',
+    field: 'NumberRangeName',
+    component: 'NumberRange',
     compProps: {
       placeholder: '请输入',
     },
@@ -38,8 +54,6 @@ const queryFields: QueryFormField[] = [
     label: '时间',
     field: 'DatePickerName',
     component: 'DatePicker',
-    labelCol: { span: 4 },
-    wrapperCol: { span: 18, offset: 2 },
     compProps: {
       placeholder: '请选择时间',
       valueFormat: 'YYYY-MM-DD',
@@ -48,7 +62,7 @@ const queryFields: QueryFormField[] = [
   {
     label: '起止时间',
     field: 'RangePickerName',
-    component: 'RangePicker',
+    component: 'DateRangePicker',
     compProps: {
       placeholder: ['请选择开始时间', '请选择结束时间'],
     },
@@ -56,9 +70,7 @@ const queryFields: QueryFormField[] = [
   {
     label: '起止月份',
     field: 'MonthRangePickerName',
-    component: 'RangePicker',
-    colSpan: 4,
-    wrapperCol: { span: 24, offset: 2 },
+    component: 'DateRangePicker',
     compProps: {
       picker: 'month',
       placeholder: ['请选择开始月份', '请选择结束月份'],
@@ -67,7 +79,7 @@ const queryFields: QueryFormField[] = [
   {
     label: '起止年秒',
     field: 'TimeRangePickerName',
-    component: 'RangePicker',
+    component: 'DateRangePicker',
     compProps: {
       disabledDate: (current: Dayjs) => {
         return current && (current.isAfter(dayjs(), 'day') || current.isBefore(dayjs().subtract(2, 'month'), 'day'));
@@ -111,7 +123,8 @@ const queryFields: QueryFormField[] = [
 
 // TODO 时区问题
 const qForm = ref<Recordable<any>>({
-  inputName: '1234',
+  InputName: '1234',
+  NumberRangeName: [0, 100],
   RangePickerName: [dayjs().subtract(8, 'h'), dayjs()],
   MonthRangePickerName: [dayjs(), dayjs()],
   TimeRangePickerName: [dayjs().subtract(2, 'hours'), dayjs()],
@@ -121,10 +134,28 @@ const onQuery = (form: Record<string, string>) => {
 };
 
 const rules: Record<string, Rule[]> = {
-  inputName: [
+  InputName: [
     { required: true, message: '文本内容不可为空' },
     { min: 3, max: 5, message: '文本内容长度要在 3 到 5 之间' },
   ],
+  NumberRangeName: [{
+    validator(_, value) {
+      if (!value || value.length !== 2) {
+        return Promise.reject('请选择数字范围');
+      }
+      const [floor, ceil] = value;
+      if (floor < 0) {
+        return Promise.reject('数字选择下限不可小于0');
+      }
+      if (ceil > 10) {
+        return Promise.reject('数字选择上限不可大于10');
+      }
+      if (ceil < floor) {
+        return Promise.reject('数字选择上限不可小于下限');
+      }
+      return Promise.resolve();
+    },
+  }],
   DatePickerName: [{ required: true, message: '时间选择不可为空' }],
   RangePickerName: [{
     validator(_, value) {
@@ -453,10 +484,37 @@ const casForm = ref<Recordable<any>>({
   casUserField: [],
 });
 
+const otherFields: QueryFormField[] = [
+  {
+    label: '示例字段1',
+    field: 'InputName',
+    component: 'Input',
+    colSpan: 4,
+    labelCol: { span: 8, offset: 2 },
+    wrapperCol: { span: 8, offset: 2 },
+    compProps: {
+      placeholder: '',
+    },
+  },
+  {
+    label: '示例字段2',
+    field: 'InputName',
+    component: 'Input',
+    colSpan: 8,
+    compProps: {
+      placeholder: 'colSpan: 4',
+    },
+  },
+];
+const otherForm = ref<Recordable<any>>({
+  casSexField: 1,
+  casUserField: [],
+});
+
 </script>
 <template>
   <div class="w-full">
-    <a-divider>文本，时间，插槽与校验</a-divider>
+    <a-divider>文本、数字范围、时间与校验</a-divider>
     <div class="p-8">
       <QueryForm
         :expand="true"
@@ -465,11 +523,6 @@ const casForm = ref<Recordable<any>>({
         v-model:form="qForm"
         @query="onQuery"
       >
-        <div class="flex justify-between">
-          <BaseIcon icon="i-mdi:flag-triangle" class="c-red" />
-          插槽内容
-          <BaseIcon icon="i-mdi:flag-triangle" class="c-green" />
-        </div>
       </QueryForm>
     </div>
     <div class="w-full flex p-8">
@@ -522,6 +575,85 @@ const casForm = ref<Recordable<any>>({
       <div class="pl-8">
         <div class="text-5">CascadeForm</div>
         <div v-for="(value, key) in casForm">{{ key }}: {{ value }}</div>
+      </div>
+    </div>
+    <a-divider>自定义列、插槽</a-divider>
+    <div class="p-8">
+      <QueryForm
+        :expand="true"
+        :fields="otherFields"
+        v-model:form="otherForm"
+      >
+        <div class="flex justify-between">
+          <BaseIcon icon="i-mdi:flag-triangle" class="c-red" />
+          插槽内容
+          <BaseIcon icon="i-mdi:flag-triangle" class="c-green" />
+        </div>
+        <template #btn>
+          <a-button danger>覆盖全部按钮</a-button>
+        </template>
+      </QueryForm>
+      <QueryForm
+        :expand="true"
+        :fields="otherFields"
+        v-model:form="otherForm"
+      >
+        <template #sub-btn>
+          <a-button class="ml-2" danger>覆盖「清空」按钮</a-button>
+        </template>
+      </QueryForm>
+    </div>
+    <div class="w-full flex p-8">
+      <div class="pl-8 w-50%">
+        <p class="text-5">自定义列说明：</p>
+        <p>
+          每个字段所占用的 colSpan 默认为：24 / 一行展示的字段数。
+        </p>
+        <p>
+          字段内的 label span 默认为 6，表单组件 span 默认为 18，
+          即：
+          <code>
+            <br />
+            labelCol: { span: 6 }
+            <br />
+            wrapperCol: { span: 18 }
+          </code>
+        </p>
+        <p>
+          示例字段1配置：
+          <code>
+            <br />
+            colSpan: 4,
+            <br />
+            labelCol: { span: 8, offset: 2 },
+            <br />
+            wrapperCol: { span: 8, offset: 2 },
+          </code>
+        </p>
+        <p>
+          示例字段2配置：
+          <code>
+            <br />
+            colSpan: 8
+          </code>
+        </p>
+      </div>
+      <div class="pl-8 w-50%">
+        <p class="text-5">插槽说明：</p>
+        <p>
+          QueryForm 当前支持的插槽有如下几个：
+        </p>
+        <ol>
+          <li>默认插槽，位置在操作按钮前，用于扩展当前不支持的表单以及非表单内容。</li>
+          <li>name 为 btn 的插槽，默认内容为按钮区，即「查询」与「清空」按钮。使用该插槽会覆盖所有按钮。</li>
+          <li>name 为 sub-btn 的插槽，默认内容为「清空」按钮。使用该插槽会覆盖按钮「清空」按钮。</li>
+        </ol>
+        <p>
+          第一行的 QueryForm 演示了默认插槽与 #btn 插槽的使用。
+        </p>
+        <p>
+          第二行的 QueryForm 演示了 #sub-btn 插槽的使用。
+        </p>
       </div>
     </div>
   </div>

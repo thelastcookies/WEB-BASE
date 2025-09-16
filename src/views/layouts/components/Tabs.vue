@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { LocationAsRelativeRaw, RouteLocationNormalized, RouteQueryAndHash, RouteRecordName } from 'vue-router';
+import type { RouteLocationNormalized, RouteLocationRaw, RouteRecordName } from 'vue-router';
 import type { Key } from '@/types';
-
-// TODO: 允许与不允许多开
 
 export interface Tab {
   name?: RouteRecordName;
@@ -21,9 +19,10 @@ const tabs = ref<Tab[]>([]);
 const initTab = () => {
   const homeRoute = routes.find(r => r.name === homepageId)!;
 
+  if (!homeRoute) return;
   let path = homeRoute.path;
-  if (homeRoute.redirect && (homeRoute.redirect as LocationAsRelativeRaw)['name'] === 'DIAGRAM') {
-    path = routes.find(r => r.name === 'DIAGRAM')!.path + '?d=' + (homeRoute.redirect as RouteQueryAndHash).query!.d;
+  if (homeRoute.redirect) {
+    path = useRouter().resolve(homeRoute.redirect as RouteLocationRaw).fullPath;
   }
   const homeTab = {
     name: homeRoute.name,
@@ -84,12 +83,6 @@ listenRouteChange((route: RouteLocationNormalized) => {
     closable: true,
   });
 }, true);
-
-
-// const name = computed(() => {
-//   const a = href.value.split(/[./]/);
-//   return a[a.length - 2];
-// });
 
 </script>
 

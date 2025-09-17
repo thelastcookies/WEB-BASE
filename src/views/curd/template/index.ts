@@ -35,7 +35,7 @@ export const queryFields: QueryFormField[] = [
   {
     label: '起止时间',
     field: 'RangePickerName',
-    component: 'RangePicker',
+    component: 'DateRangePicker',
     compProps: {
       placeholder: ['请选择开始时间', '请选择结束时间'],
       valueFormat: 'YYYY-MM-DD',

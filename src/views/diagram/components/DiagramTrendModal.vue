@@ -26,7 +26,7 @@ const qForm = ref<Recordable<any>>({
 const queryFields: QueryFormField[] = [
   {
     field: 'time',
-    component: 'RangePicker',
+    component: 'DateRangePicker',
     colSpan: 10,
     labelCol: { span: 4 },
     wrapperCol: { span: 24 },

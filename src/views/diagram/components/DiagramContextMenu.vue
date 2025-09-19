@@ -14,12 +14,14 @@ const emit = defineEmits<{
 }>();
 
 const key = ref(0);
+const open = ref(false);
 
 const { selections } = storeToRefs(useDiagramStore());
 const type = ref<'global' | 'node'>('global');
 
-watch(selections, s => {
-  type.value = s.length ? 'node' : 'global';
+watch(open, o => {
+  if (!o) return;
+  type.value = selections.value.length ? 'node' : 'global';
 });
 
 const globalMenu = ref([{
@@ -44,12 +46,13 @@ const nodeMenu = ref([{
 
 const handleMenuClick = (key: number) => {
   emit('menuClick', key);
+  open.value = false;
 };
 
 </script>
 
 <template>
-  <a-dropdown :trigger="['contextmenu']">
+  <a-dropdown :trigger="['contextmenu']" v-model:open="open">
     <slot></slot>
     <template #overlay>
       <a-menu>

@@ -8,6 +8,7 @@
     "strict": true
   },
   "include": [
+    "plugins/**/*.ts",
     "vite.config.ts"
   ]
 }

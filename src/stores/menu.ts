@@ -3,10 +3,10 @@ import type { ActionRecordRaw } from '@/types/action';
 import type { TreeNode } from '@/utils/tree';
 
 export const useMenuStore = defineStore('menu', () => {
-  const menu = ref([] as MenuTreeNode[]);
+  const menu = ref<MenuTreeNode[]>([]);
 
   const actionToMenu = (tree: TreeNode<ActionRecordRaw>[]): MenuTreeNode[] => {
-    let menuTree = [] as MenuTreeNode[];
+    let menuTree: MenuTreeNode[] = [];
     const treeSorted = tree.sort((a, b) => (a.sort || Infinity) - (b.sort || Infinity));
     for (const item of treeSorted) {
       if (item.showInMenu === false) continue;
@@ -17,6 +17,10 @@ export const useMenuStore = defineStore('menu', () => {
       };
       if ('icon' in item) {
         menuNode.icon = item.icon;
+      }
+      // 带入路由元数据
+      if ('meta' in item) {
+        menuNode.meta = item.meta;
       }
       if (
         'children' in item

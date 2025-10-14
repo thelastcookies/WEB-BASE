@@ -1,5 +1,6 @@
-import { VNodeChild } from 'vue';
+import type { VNodeChild } from 'vue';
 import type { MessageArgsProps } from 'ant-design-vue/es/message';
+import type { RouteMeta } from 'vue-router';
 
 export type Key = string | number;
 export type RecordName = string | symbol;
@@ -66,6 +67,7 @@ export interface MenuTreeNode {
   icon?: string | (() => VNodeChild);
   disabled?: boolean;
   showInMenu?: boolean;
+  meta?: RouteMeta;
   children?: MenuTreeNode[];
 }
 

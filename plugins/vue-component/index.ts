@@ -10,7 +10,7 @@ export const VueComponentPluginConfig: PluginOption = Components({
     /\.vue\?vue/, // .vue
   ],
   dirs: [
-    'src/components/**',
+    'src/components',
     'src/views/**/components',
     '!src/views/curd/**/components',
     'src/views/form/lib/configs',

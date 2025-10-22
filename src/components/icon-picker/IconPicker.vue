@@ -9,7 +9,7 @@ const current = ref(1);
 const iconsFiltered = computed(() => {
   current.value = 1;
   if (!search.value) return safelistIcons;
-  return safelistIcons.filter((i) => i.indexOf(search.value) > -1);
+  return safelistIcons.filter((i: string) => i.indexOf(search.value) > -1);
 });
 const total = computed(() => iconsFiltered.value.length);
 

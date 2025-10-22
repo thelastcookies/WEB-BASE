@@ -4,7 +4,7 @@ import type { HisDataType } from '@/enums';
 export interface BaseResponseBody<T = any> {
   code: number;
   msg: string;
-  data: ? T;
+  data?: T;
 }
 
 export interface TagsRequestBody {

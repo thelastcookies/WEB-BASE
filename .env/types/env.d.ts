@@ -36,10 +36,18 @@ interface ImportMetaEnv {
   readonly APP_THEME: 'system' | 'light' | 'dark';
   readonly APP_API_BASE_URL: string;
   readonly APP_API_ADMIN_URL: string;
-  readonly APP_API_MOCK_URL: string;
   readonly APP_WHITE_ORIGIN: string;
   // 组态部署目录路径
   readonly APP_DIAGRAM_RESOURCE_URL: string;
+  /**
+   * APP_MOCK_TYPE
+   * 是否启用 Mock，以及 Mock 来源
+   *   local: 本地随机 Mock
+   *   remote: 远程获取 Mock
+   *   none: 关闭 Mock
+   */
+  readonly APP_MOCK_TYPE: 'local' | 'remote' | 'none';
+  readonly APP_API_MOCK_URL: string;
 }
 
 interface ImportMeta {

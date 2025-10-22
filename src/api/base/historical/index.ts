@@ -1,5 +1,7 @@
 import type { BaseResponseBody, HisTagParams, TagTimeRequestBody, ValueResponseBody } from '@/api/base/types';
 
+const isNativeMock = import.meta.env.APP_MOCK_ENABLE === 'local';
+
 export const getTrend = (data: TagTimeRequestBody) => {
   return usePost<BaseResponseBody<ValueResponseBody>, TagTimeRequestBody>(
     `${BASE_URL}/RealTime/GetInterp`,
@@ -55,24 +57,24 @@ export const getTrendData = async (
   let stStr = st.format('YYYYMMDDHHmmss');
   let edStr = ed.format('YYYYMMDDHHmmss');
 
-  /**
-   * mock start
-   */
-  // const len = Math.floor(((ed?.valueOf() - st.valueOf()) / interval) / 1000);
-  // const res = {
-  //   data: {
-  //     values: tags.split('|').map(_ => Array.from(new Array(len), () => round(Math.random())).join(';')).join('|'),
-  //   },
-  // };
-  /**
-   * mock end
-   */
+  let res: BaseResponseBody<ValueResponseBody>;
+  if (isNativeMock) {
+    const len = Math.floor(((ed?.valueOf() - st.valueOf()) / interval) / 1000);
+    res = {
+      code: 200,
+      data: {
+        values: tags.split('|').map(_ => Array.from(new Array(len), () => Math.random() * 100).join(';')).join('|'),
+      },
+      msg: '',
+    };
+  } else {
+    res = await getTrend({
+      tags,
+      time: stStr + '-' + edStr,
+      interval,
+    });
+  }
 
-  const res = await getTrend({
-    tags,
-    time: stStr + '-' + edStr,
-    interval,
-  });
   if (res.code !== 200) return;
   let tagValueArr = res.data!.values.split('|').map(item => item.split(';'));
   let timeArr: string[] = [];

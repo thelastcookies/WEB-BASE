@@ -1,5 +1,7 @@
 import type { BaseResponseBody, DescResponseBody, TagsRequestBody, ValueResponseBody } from '@/api/base/types';
 
+const isNativeMock = import.meta.env.APP_MOCK_ENABLE === 'local';
+
 export const getRealtime = (tags: string) => {
   return usePost<BaseResponseBody<ValueResponseBody>, TagsRequestBody>(
     `${BASE_URL}/RealTime/GetReal`,
@@ -24,22 +26,22 @@ export const getRtData = async (tags: string[], decimal?: number) => {
   const tagSet = new Set(tags.filter(t => !!t));
   const tagStr = [...tagSet].join('|');
 
-  /**
-   * mock start
-   */
-  // const res = {
-  //   data: {
-  //     // values: tags.map(_ => Math.random() * 100).join('|'),
-  //     values: tags.map(_ => round(Math.random())).join('|'),
-  //   }
-  // }
-  /**
-   * mock end
-   */
+  let res: BaseResponseBody<ValueResponseBody>;
 
-  const res = await getRealtime(tagStr);
+  if (isNativeMock) {
+    res = {
+      code: 200,
+      data: {
+        // values: tags.map(_ => Math.random() * 100).join('|'),
+        values: tags.map(_ => round(Math.random())).join('|'),
+      },
+      msg: '',
+    };
+  } else {
+    res = await getRealtime(tagStr);
+  }
+
   if (res.code !== 200 || !res.data) return;
-
   let tagMap: Map<string, number> = new Map();
   let dataList = res.data.values.split('|').map(item => Number(item));
   tagStr.split('|').forEach((tag, idx) => {

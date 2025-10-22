@@ -160,7 +160,7 @@ export const staticActions = createTree<ActionRecordRaw>([
     sort: 8,
     showInMenu: true,
     url: 'iframe',
-    resource: 'https://next.antdv.com/components/overview-cn',
+    resource: 'https://antdv.com/components/overview-cn',
   },
 ]);
 

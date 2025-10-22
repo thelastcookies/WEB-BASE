@@ -23,7 +23,7 @@ export const basicRouteMap = {
   // 用于 iframe 外嵌页面
   IFrame: () => import('@/views/common/IFrame.vue'),
   // 用于组态图的页面
-  Diagram: () => import('@/views/diagram/Index.vue'),
+  Diagram: () => import('@/views/common/diagram/Diagram.vue'),
   // 空页面
   ComponentError: () => import('@/views/exceptions/ComponentError.vue'),
 };

@@ -42,9 +42,11 @@ export class Diagram {
   // 数据
   valueMap: Map<string, number> | undefined;
 
-  constructor(json: DiagramJson) {
-    this.dmCanvas = document.getElementById('dm-canvas') as HTMLCanvasElement;
-    this.slCanvas = document.getElementById('sl-canvas') as HTMLCanvasElement;
+  constructor(json: DiagramJson, randomId?: string) {
+    const dmDomId = randomId ? `dm-canvas-${randomId}` : 'dm-canvas';
+    const slDomId = randomId ? `sl-canvas-${randomId}` : 'sl-canvas';
+    this.dmCanvas = document.getElementById(dmDomId) as HTMLCanvasElement;
+    this.slCanvas = document.getElementById(slDomId) as HTMLCanvasElement;
 
     this.dmMap = this.deserialize(json);
 
@@ -78,7 +80,7 @@ export class Diagram {
     this.left = left;
 
     // this.draw();
-    // this.fit();
+    this.fit();
     this.lastTime = performance.now();
     this.animationId = requestAnimationFrame(this.loop);
   }

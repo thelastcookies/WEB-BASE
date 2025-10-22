@@ -14,6 +14,7 @@ export const VueComponentPluginConfig: PluginOption = Components({
     'src/views/**/components',
     '!src/views/curd/**/components',
     'src/views/form/lib/configs',
+    'src/views/common',
   ],
   dts: './plugins/vue-component/components.d.ts',
   resolvers: [

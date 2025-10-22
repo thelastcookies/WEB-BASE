@@ -71,7 +71,7 @@ const handleTabClick = (path: Key) => {
 listenRouteChange((route: RouteLocationNormalized) => {
   let title: string;
   if (route.name === 'DIAGRAM') {
-    const href = (route.query?.d as string).split(/[./]/);
+    const href = (route.query?.href as string).split(/[./]/);
     title = href[href.length - 2];
   } else {
     title = route.meta?.title as string;

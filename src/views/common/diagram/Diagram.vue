@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs';
-import type { Diagram as DiagramType } from '@/views/diagram/scripts';
+import type { Diagram as DiagramType } from '@/views/common/diagram/scripts';
+
+const props = defineProps<{
+  href?: string;
+}>();
 
 const route = useRoute();
-const href = computed(() => route.query?.d as string);
+const href = computed(() => (props.href || route.meta?.href) as string);
 
 const dmContainer = ref<HTMLElement>();
 const dmCanvas = ref<HTMLCanvasElement>();
 const slCanvas = ref<HTMLCanvasElement>();
+
+const randomId = nanoid(6);
 
 const diagram = ref<DiagramType>();
 // const loading = ref(true);
@@ -34,7 +40,7 @@ const load = async () => {
     const res = await fetch(preprocessHref(href.value));
     const json = await res.json();
 
-    diagram.value = new Diagram(json);
+    diagram.value = new Diagram(json, randomId);
     nodeTagArr.value = diagram.value.getTags();
 
     // 请求实时数据并定时
@@ -124,9 +130,7 @@ const handleMouseDown = async (e: MouseEvent) => {
   if (!href) return;
   await routeTo({
     name: 'DIAGRAM',
-    query: {
-      d: href,
-    },
+    query: { href },
   });
 };
 
@@ -151,15 +155,15 @@ const handleContextClick = (key: number) => {
 </script>
 
 <template>
-  <div class="w-full h-full relative of-hidden bg-gray">
+  <div class="w-full h-full relative of-hidden diagram-container-bg">
     <DiagramContextMenu @menu-click="handleContextClick">
       <div ref="dmContainer"
         class="w-full relative"
         :class="[timeSliderOpen ? 'h-[calc(100%-78px)]' : 'h-full']"
       >
-        <canvas ref="slCanvas" id="sl-canvas" class="canvas z-10"
+        <canvas ref="slCanvas" :id="`sl-canvas-${randomId}`" class="canvas z-10"
           @mousedown="handleMouseDown"></canvas>
-        <canvas ref="dmCanvas" id="dm-canvas" class="canvas z-5"></canvas>
+        <canvas ref="dmCanvas" :id="`dm-canvas-${randomId}`" class="canvas z-5"></canvas>
       </div>
     </DiagramContextMenu>
     <DiagramTimeSlider v-if="timeSliderOpen" v-model:value="timeSliderValue"
@@ -173,11 +177,17 @@ const handleContextClick = (key: number) => {
 </template>
 
 <style scoped lang="less">
+.diagram-container-bg {
+  background-color: #000;
+  background-image: url("~/icons/rect.png");
+  background-size: 40px 40px;
+  background-position: center;
+}
 .canvas {
   position: absolute;
   top: 0;
   left: 0;
   transform-origin: top left;
-  transition: all 0.1s;
+  //transition: all 0.1s;
 }
 </style>

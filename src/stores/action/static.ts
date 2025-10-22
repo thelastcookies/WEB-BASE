@@ -86,17 +86,6 @@ export const staticActions = createTree<ActionRecordRaw>([
         showInMenu: true,
         url: 'organization',
         resource: 'settings/org/Index.vue',
-      },
-      {
-        id: '1536653005456150528',
-        pId: '1536643442430447616',
-        actionId: 'pwdSett',
-        title: '密码管理',
-        type: MenuTypeEnum.PAGE,
-        sort: 96,
-        showInMenu: true,
-        url: 'password',
-        resource: 'settings/pwd/Index.vue',
       }, {
         id: '1536653005456150529',
         pId: '1536643442430447616',

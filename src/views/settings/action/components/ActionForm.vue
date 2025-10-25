@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EditEnum as EditEnumType } from '@/constants/enums';
 import type { Recordable } from '@/types';
-import type { ActionResponseRecord } from '@/api/admin/action/types';
+import type { ActionResponseRecord, PermissionRecord } from '@/api/admin/action/types';
 import type { Rule } from 'ant-design-vue/es/form';
 import type { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
 import type { TreeNode } from '@/utils/tree';
@@ -56,43 +56,20 @@ const handleReset = () => {
   formData.value = cloneDeep(props.value);
 };
 
-const handlePermAdd = () => {
-  if (!formData.value) return;
-  if (formData.value.PermissionList?.length) {
-    formData.value?.PermissionList?.push({
-      Name: '',
-      Value: '',
-      Type: MenuTypeEnum.PERM,
-    });
-  } else {
-    formData.value.PermissionList = [{
-      Name: '',
-      Value: '',
-      Type: MenuTypeEnum.PERM,
-    }];
-  }
-};
-
-const handleMetaAdd = () => {
-  if (!formData.value) return;
-  if (metas.value?.length) {
-    metas.value?.push({
-      key: '',
-      value: '',
-    });
-  } else {
-    metas.value = [{
-      key: '',
-      value: '',
-    }];
-  }
-};
-
 const handleSubmit = async () => {
   loading.value = true;
   try {
     await formRef.value?.validate();
     const params = cloneDeep(formData.value);
+    // 处理 PermissionList
+    if (params.PermissionList.length) {
+      params.PermissionList = params.PermissionList.map((p: PermissionRecord) => {
+        return {
+          ...p,
+          Type: MenuTypeEnum.PERM,
+        };
+      });
+    }
     // 处理 meta
     if (metas.value?.length) {
       let metaConf: Recordable<string> = {};
@@ -335,7 +312,6 @@ const handleDelete = async () => {
             class="w-full"
             v-model:data-source="formData.PermissionList"
             :columns="permTableColumns"
-            @add="handlePermAdd"
           ></InlineEditTable>
         </a-row>
         <a-row>
@@ -346,7 +322,6 @@ const handleDelete = async () => {
             class="w-full"
             v-model:data-source="metas"
             :columns="metaTableColumns"
-            @add="handleMetaAdd"
           ></InlineEditTable>
         </a-row>
       </a-form>

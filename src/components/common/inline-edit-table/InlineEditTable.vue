@@ -5,39 +5,43 @@ const dataSource = defineModel<any[]>('dataSource', {
   default: () => [],
 });
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   columns: TableEditableColumnProps[],
 }>(), {
   columns: () => [],
 });
 
-const emit = defineEmits<{
-  (e: 'add'): void;
-  (e: 'update:dataSource'): void;
-}>();
-
-const editableData: Record<string, any> = reactive({});
+const editableData: any[] = reactive([]);
 
 const handleAdd = () => {
-  const oldLen = dataSource.value.length ?? 0;
-  emit('add');
-  nextTick(() => {
-    const newLen = dataSource.value.length;
-    if (newLen === oldLen + 1) handleEdit(dataSource.value.length - 1);
+  const record = {};
+  props.columns.forEach(col => {
+    if (!col.editable) return;
+    merge(record, { [col.dataIndex as string]: '' });
   });
+  editableData[dataSource.value.length] = { ...record, new: true };
+  dataSource.value.push(record);
 };
 const handleEdit = (idx: number) => {
   editableData[idx] = cloneDeep(dataSource.value[idx]);
 };
 const handleSave = (idx: number) => {
+  if (editableData[idx].new) {
+    delete editableData[idx].new;
+  }
   Object.assign(dataSource.value[idx], editableData[idx]);
-  delete editableData[idx];
+  editableData[idx] = null;
 };
 const handleCancel = (idx: number) => {
-  delete editableData[idx];
+  if (editableData[idx].new) {
+    editableData.splice(idx, 1);
+    dataSource.value.splice(idx, 1);
+  } else {
+    editableData[idx] = null;
+  }
 };
 const handleDelete = (idx: number) => {
-  delete editableData[idx];
+  editableData.splice(idx, 1);
   dataSource.value.splice(idx, 1);
 };
 </script>
@@ -49,7 +53,7 @@ const handleDelete = (idx: number) => {
         <div class="flex justify-evenly">
           <span>{{ title }}</span>
           <a-button type="primary" size="small"
-                    @click="handleAdd">新增
+            @click="handleAdd">新增
           </a-button>
         </div>
       </template>

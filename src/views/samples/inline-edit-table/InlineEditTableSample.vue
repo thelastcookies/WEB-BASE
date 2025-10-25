@@ -68,7 +68,6 @@ const tableColumns: TableEditableColumnProps[] = [
     title: '操作',
     dataIndex: 'operation',
     width: 160,
-    editable: true,
   },
 ];
 

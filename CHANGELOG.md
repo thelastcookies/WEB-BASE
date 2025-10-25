@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.27.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.26.0...v0.27.0) (2025-10-25)
+
+
+### Features
+
+* 在菜单中引入路由元数据 ([1ab8fc7](https://github.com/thelastcookies/WEB-BASE/commit/1ab8fc7177f95da43b643068e4cc3e14e53c7c1e))
+* 完善 Diagram 组件功能，新增组态的接入方式，新增接入示例，美化组态背景，修改组态初始加载方式，调整项目结构 ([008870a](https://github.com/thelastcookies/WEB-BASE/commit/008870a2b2b9cbbc3f128da2d33a49dbef48f5f3))
+* 新增 Mock 启停的配置化 ([8967f55](https://github.com/thelastcookies/WEB-BASE/commit/8967f5544d24ad0cfc7136f0bd88b2720223976a))
+
+
+### Bug Fixes
+
+* 修复组态图右键菜单内容切换的问题 ([d64410e](https://github.com/thelastcookies/WEB-BASE/commit/d64410e666c848eaeb2bd6c6e69d8f4c1187a077))
+* 修复行内编辑表格组件的已知问题 ([482bbd5](https://github.com/thelastcookies/WEB-BASE/commit/482bbd5fb809bfe3e73a0dc7e37fc850bd7faac0))
+
 ## [0.26.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.25.0...v0.26.0) (2025-09-17)
 
 

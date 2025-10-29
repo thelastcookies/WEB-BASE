@@ -82,6 +82,11 @@ const actionToRoute = (action: TreeNode<ActionRecordRaw>): RouteRecordRaw => {
   }
   if (action.type === MenuTypeEnum.PAGE) {
     route.component = getRouterModule(action.resource);
+    if (action.getChildren()?.length) {
+      route.redirect = {
+        name: findDescendantWithUrlDefined(action)?.actionId as RouteRecordName,
+      };
+    }
   } else if (action.type === MenuTypeEnum.MENU) {
     route.redirect = action.redirect ?? {
       name: findDescendantWithUrlDefined(action)?.actionId as RouteRecordName,
@@ -110,6 +115,6 @@ export const findDescendantWithUrlDefined = (
 ): TreeNode<ActionRecordRaw> | undefined => {
   if (action.children) {
     if (action.children[0]?.url) return action.children[0];
-    else findDescendantWithUrlDefined(action.children[0]);
+    else return findDescendantWithUrlDefined(action.children[0]);
   } else return undefined;
 };

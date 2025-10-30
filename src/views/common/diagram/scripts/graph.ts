@@ -93,6 +93,13 @@ const graphConfig: GraphConfig[] = [
     ],
   },
   {
+    name: '硬压板', type: 'switch',
+    images: [
+      'symbols/new-energy/硬压板-variant1.svg',
+      'symbols/new-energy/硬压板-variant2.svg',
+    ],
+  },
+  {
     name: '远方就地信号', type: 'switch',
     images: [
       'symbols/new-energy/远方就地信号-variant1.svg',

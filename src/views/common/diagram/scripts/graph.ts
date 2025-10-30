@@ -93,6 +93,13 @@ const graphConfig: GraphConfig[] = [
     ],
   },
   {
+    name: '硬压板', type: 'switch',
+    images: [
+      'symbols/new-energy/硬压板-variant1.svg',
+      'symbols/new-energy/硬压板-variant2.svg',
+    ],
+  },
+  {
     name: '远方就地信号', type: 'switch',
     images: [
       'symbols/new-energy/远方就地信号-variant1.svg',
@@ -138,11 +145,12 @@ const graphConfig: GraphConfig[] = [
   { name: '熔断器', type: 'static', image: 'symbols/new-energy/static/熔断器.svg' },
   { name: '线圈', type: 'static', image: 'symbols/new-energy/static/线圈.svg' },
   { name: '消弧线圈', type: 'static', image: 'symbols/new-energy/static/消弧线圈.svg' },
-  { name: '电阻', type: 'static', image: 'symbols/new-energy/static/电阻.svg' },
+  { name: '电容', type: 'static', image: 'symbols/new-energy/static/电容.svg' },
   { name: '电流互感器', type: 'static', image: 'symbols/new-energy/static/电流互感器.svg' },
   { name: '接地电流互感器', type: 'static', image: 'symbols/new-energy/static/接地电流互感器.svg' },
   { name: '接地线圈互感器', type: 'static', image: 'symbols/new-energy/static/接地线圈互感器.svg' },
   { name: '带电显示器', type: 'static', image: 'symbols/new-energy/static/带电显示器.svg' },
+  { name: '电阻', type: 'static', image: 'symbols/new-energy/static/电阻.svg' },
   { name: '接地电阻', type: 'static', image: 'symbols/new-energy/static/接地电阻.svg' },
   { name: '接地电阻2', type: 'static', image: 'symbols/new-energy/static/接地电阻2.svg' },
   { name: 'IGBT', type: 'static', image: 'symbols/new-energy/static/IGBT.svg' },

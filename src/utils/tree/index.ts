@@ -103,6 +103,6 @@ export class TreeNode<T extends TreeNodeInterface = TreeNodeInterface> implement
   }
 
   isRoot(): boolean {
-    return [null, 'root', 'ROOT'].includes(this.getParentId() as string);
+    return [undefined, null, 'root', 'ROOT'].includes(this.getParentId() as string);
   }
 }

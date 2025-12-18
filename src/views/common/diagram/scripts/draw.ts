@@ -439,7 +439,7 @@ export const drawLabel = (ctx: CanvasRenderingContext2D, d: DiagramDataWithPosit
     const reverse = d.a?.['node.type.switch.reverse'] ?? false;
     if (reverse && value !== null) value = value ^ 1;
     ctx.fillStyle = value === null ? color1 :
-      value === 1 ? color1 : color2;
+      value === 1 ? color2 : color1;
   } else if (name === '显示隐藏') {
     const reverse = d.a?.['node.type.switch.reverse'] ?? false;
     if (reverse && value !== null) value = value ^ 1;
@@ -479,7 +479,7 @@ export const drawAnnunciator = (ctx: CanvasRenderingContext2D, d: DiagramDataWit
   if (reverse && value !== null) value = value ^ 1;
 
   ctx.fillStyle = value === null ? color1 :
-    value === 1 ? color1 : color2;
+    value === 1 ? color2 : color1;
 
   ctx.fillRect(dx, dy, w, h);
   ctx.restore();

@@ -5,23 +5,17 @@
  */
 export const useTimedRefresh = (
   handler: Function,
-  interval: number = 30000,
+  interval: number = 2000,
 ) => {
-  let timer = -1;
-  const clearTimer = () => {
-    if (timer) clearInterval(timer);
-  };
-  const resetTimedRefresh = () => {
-    clearTimer();
+  const { pause, resume, isActive } = useIntervalFn(() => {
     handler();
-    timer = setInterval(handler, interval);
-  };
-  tryOnMounted(() => {
-    handler();
-    timer = setInterval(handler, interval);
+  }, interval, {
+    immediateCallback: true,
   });
 
-  tryOnUnmounted(() => clearTimer());
+  tryOnUnmounted(() => {
+    pause();
+  });
 
-  return { resetTimedRefresh };
+  return { pause, resume, isActive };
 };

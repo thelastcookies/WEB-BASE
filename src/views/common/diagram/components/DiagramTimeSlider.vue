@@ -72,7 +72,7 @@ const formatter = (value?: number) => {
 
 <template>
   <div class="flex-1 m-2 p-2 flex gap-2 items-center bg-ant.bg-elevated
-              rounded-ant.br b-ant.border b-1 b-solid z-ant.l1">
+              rounded-ant.br b-ant.border b-1 b-solid z-ant.z1">
     <a-button type="primary" ghost shape="circle" @click="isActive = !isActive">
       <BaseIcon size="1.5" :icon="isActive ? 'i-mdi-pause' : 'i-mdi-play'" />
     </a-button>

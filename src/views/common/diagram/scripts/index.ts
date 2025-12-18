@@ -42,6 +42,9 @@ export class Diagram {
   // 数据
   valueMap: Map<string, number> | undefined;
 
+  // 控制测点
+  controlTagMap: Map<string, ControlTagInfoRecordExt> | undefined;
+
   constructor(json: DiagramJson, randomId?: string) {
     const dmDomId = randomId ? `dm-canvas-${randomId}` : 'dm-canvas';
     const slDomId = randomId ? `sl-canvas-${randomId}` : 'sl-canvas';
@@ -194,9 +197,9 @@ export class Diagram {
       if (!type) return;
       const tag = graph.a?.['node.tag'];
       if (tag) tags.push(tag);
-      if (type === 'ctmp' || type === 'CB') {
-        const tag1 = graph.a?.['node.tag.CB'] ?? graph.a?.['node.tag.cmp'];
-        const tag2 = graph.a?.['node.tag.drawout'] ?? graph.a?.['node.tag.tmp'];
+      if (type === 'CB') {
+        const tag1 = graph.a?.['node.tag.CB'];
+        const tag2 = graph.a?.['node.tag.drawout'];
         if (tag1) tags.push(tag1);
         if (tag2) tags.push(tag2);
       }
@@ -204,8 +207,45 @@ export class Diagram {
     return tags;
   };
 
-  setTagValue(tvMap?: Map<string, number>) {
+  getControlTags = (params?: DiagramDataWithPosition[]) => {
+    const tags: string[] = [];
+    const iter = params ?? this.dmMap;
+    iter.forEach(graph => {
+      const g = graphMap.get(graph.p.name);
+      const type = g?.type;
+      if (!type) return;
+      if (type === 'ctmp') {
+        const tag1 = graph.a?.['node.tag.cmp'];
+        const tag2 = graph.a?.['node.tag.tmp'];
+        if (tag1) tags.push(tag1);
+        if (tag2) tags.push(tag2);
+      }
+    });
+    return tags;
+  };
+
+  setValueMap(tvMap?: Map<string, number>) {
     this.valueMap = tvMap;
+  }
+
+  getValueMap() {
+    return this.valueMap;
+  }
+
+  getValue(tag: string) {
+    return this.valueMap?.get(tag);
+  }
+
+  setControlTagMap(cMap?: Map<string, ControlTagInfoRecordExt>) {
+    this.controlTagMap = cMap;
+  }
+
+  getControlTagMap() {
+    return this.controlTagMap;
+  }
+
+  getControlTag(tag: string) {
+    return this.controlTagMap?.get(tag);
   }
 
   /**

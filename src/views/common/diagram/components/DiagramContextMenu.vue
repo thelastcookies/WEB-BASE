@@ -1,30 +1,21 @@
 <script setup lang="ts">
-//
-// const props = withDefaults(defineProps<{
-//   x?: number;
-//   y?: number;
-//   tag?: string;
-// }>(), {
-//   x: 0,
-//   y: 0,
-// });
+import type { Diagram as DiagramType } from '@/views/common/diagram/scripts';
 
+const props = withDefaults(defineProps<{
+  diagram?: DiagramType;
+}>(), {});
 const emit = defineEmits<{
-  (e: 'menuClick', key: number): void;
+  (e: 'menuClick', key: number, coords: { x: number; y: number }): void;
 }>();
 
 const key = ref(0);
 const open = ref(false);
 
 const { selections } = storeToRefs(useDiagramStore());
-const type = ref<'global' | 'node'>('global');
 
-watch(open, o => {
-  if (!o) return;
-  type.value = selections.value.length ? 'node' : 'global';
-});
+const menu = ref<ContextMenuItem[]>([]);
 
-const globalMenu = ref([{
+const globalMenu = [{
   key: 0,
   value: '查看历史回放',
   disabled: () => key.value === 0,
@@ -32,9 +23,9 @@ const globalMenu = ref([{
   key: 1,
   value: '关闭历史回放',
   disabled: () => key.value === 1,
-}]);
+}];
 
-const nodeMenu = ref([{
+const nodeMenu = [{
   key: 10,
   value: '查看测点详情',
   disabled: () => selections.value.length > 1,
@@ -42,11 +33,33 @@ const nodeMenu = ref([{
   key: 11,
   value: '查看历史趋势',
   disabled: false,
-}]);
+}];
 
-const handleMenuClick = (key: number) => {
-  emit('menuClick', key);
+watch(open, v => {
+  if (!v) return;
+  if (selections.value.length) {
+    let m: ContextMenuItem[] = [];
+    if (selections.value.length === 1) {
+      const cTag = selections.value[0].a?.['node.tag.cmp'];
+      if (cTag) {
+        const t = props.diagram?.getControlTag(cTag);
+        m.push(merge({}, ...diagramControlContextMenu.cmp!, { value: t?.action }));
+      }
+      const tTag = selections.value[0].a?.['node.tag.tmp'];
+      if (tTag) {
+        const t = props.diagram?.getControlTag(tTag);
+        m.push(merge({}, ...diagramControlContextMenu.tmp!, { value: t?.action }));
+      }
+    }
+    menu.value = [...nodeMenu, ...m];
+  } else {
+    menu.value = globalMenu;
+  }
+});
+
+const handleMenuClick = (e: MouseEvent, key: number) => {
   open.value = false;
+  emit('menuClick', key, { x: e.clientX, y: e.clientY });
 };
 
 </script>
@@ -57,9 +70,9 @@ const handleMenuClick = (key: number) => {
     <template #overlay>
       <a-menu>
         <a-menu-item
-          v-for="item in (type === 'global' ? globalMenu : nodeMenu)"
+          v-for="item in menu"
           :key="item.key"
-          @click="handleMenuClick(item.key)"
+          @click="handleMenuClick($event, item.key)"
         >{{ item.value }}
         </a-menu-item>
       </a-menu>

@@ -7,7 +7,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
-const href = computed(() => (props.href || route.meta?.href) as string);
+const href = computed(() => (props.href || route.query?.href || route.meta?.href) as string);
 
 const dmContainer = ref<HTMLElement>();
 const dmCanvas = ref<HTMLCanvasElement>();
@@ -22,6 +22,7 @@ const nodeTagArr = ref<string[]>([]);
 
 // 测点详情
 const detailOpen = ref(false);
+const detailCoords = ref({ x: 0, y: 0 });
 const detailTags = ref<string[]>([]);
 
 // 历史回放相关
@@ -45,6 +46,11 @@ const load = async () => {
 
     // 请求实时数据并定时
     resume();
+
+    const cTags = diagram.value.getControlTags();
+    if (cTags && cTags.length) {
+      await fetchControl(cTags);
+    }
   } catch (_) {
     if (!href.value) {
       message.error(`未指定加载文件`);
@@ -61,7 +67,7 @@ tryOnMounted(() => {
 // 实时数据请求定时器
 const { pause, resume } = useIntervalFn(() => {
   if (nodeTagArr.value.length) getRealTimeData(nodeTagArr.value);
-}, 5000, {
+}, 2000, {
   immediateCallback: true,
 });
 
@@ -72,7 +78,7 @@ const { pause, resume } = useIntervalFn(() => {
 const getRealTimeData = async (tags: string[]) => {
   const tvMap = await getRtData(tags);
   // console.log(tvMap);
-  diagram.value!.setTagValue(tvMap);
+  diagram.value!.setValueMap(tvMap);
 };
 
 /**
@@ -88,13 +94,13 @@ const getHistoricalData = async () => {
 
   if (data) {
     timeSliderData.value = [...data].map(it => it[1]);
-    diagram.value!.setTagValue(timeSliderData.value[0]);
+    diagram.value!.setValueMap(timeSliderData.value[0]);
   }
 };
 
 watch(timeSliderValue, idx => {
   if (timeSliderData.value) {
-    diagram.value!.setTagValue(timeSliderData.value[idx]);
+    diagram.value!.setValueMap(timeSliderData.value[idx]);
   }
 });
 
@@ -125,16 +131,27 @@ const showTrendModal = () => {
 };
 
 const handleMouseDown = async (e: MouseEvent) => {
-  const graph = await diagram.value!.setSelection(e);
-  const href = graph.a?.['button.link'];
-  if (!href) return;
-  await routeTo({
-    name: 'DIAGRAM',
-    query: { href },
-  });
+  if (e.button === 0) {
+    await diagram.value!.setSelection(e);
+    const graph = selections.value[0];
+    const href = graph.a?.['button.link'];
+    if (href) {
+      await routeTo({
+        name: 'DIAGRAM',
+        query: {
+          d: href,
+        },
+      });
+    } else if (graph.p.name === '操作按钮（开机）' || graph.p.name === '操作按钮（关机）') {
+      // 开关机按钮
+      controlModalOpen.value = true;
+    }
+  } else {
+
+  }
 };
 
-const handleContextClick = (key: number) => {
+const handleContextClick = (key: number, coords: { x: number; y: number }) => {
   if (key === 0) {
     // 开启历史回放
     hisTimeRange.value = [dayjs().subtract(2, 'hours'), dayjs()];
@@ -147,18 +164,64 @@ const handleContextClick = (key: number) => {
     resume();
   } else if (key === 10) {
     detailOpen.value = true;
+    detailCoords.value = coords;
+    detailTags.value = selections.value.map(s => s.a!['node.tag']!);
   } else if (key === 11) {
     showTrendModal();
+  } else if (Object.values(diagramControlContextMenu).flatMap(it => it.map(i => i.key)).includes(key)) {
+    let tag = '';
+    if (key === 21) {
+      tag = selections.value[0].a!['node.tag.cmp']!;
+    } else if (key === 22) {
+      tag = selections.value[0].a!['node.tag.tmp']!;
+    } else {
+      return;
+    }
+
+    handleControl(diagram.value?.getControlTag(tag));
+  } else {
   }
 };
 
+/**
+ * 控制
+ */
+const { controlModalOpen, controlCrtState, controlTagInfo } = storeToRefs(useControlStore());
+
+const fetchControl = async (tags: string[]) => {
+  const { Data: cTags } = await getControlTagInfo({
+    Tag: tags.join(','),
+  });
+  if (!cTags || !cTags.length) return;
+
+  let cMap = new Map<string, ControlTagInfoRecordExt>([]);
+  tags.forEach(tag => {
+    let t = cTags.find(t => tag === t.Tag);
+    if (t) {
+      cMap.set(tag, {
+        ...t,
+        action: t.ControlType.split(',')[1],
+      });
+    }
+  });
+  diagram.value?.setControlTagMap(cMap);
+};
+
+const handleControl = (controlTag?: ControlTagInfoRecord) => {
+  if (!controlTag) {
+    message.error('获取测点信息失败，请检查测点配置');
+    return;
+  }
+  controlModalOpen.value = true;
+  controlTagInfo.value = controlTag;
+  controlCrtState.value = String(diagram.value?.getValue(selections.value[0].a!['node.tag']!) ?? 0);
+};
 </script>
 
 <template>
-  <div class="w-full h-full relative of-hidden diagram-container-bg">
-    <DiagramContextMenu @menu-click="handleContextClick">
-      <div ref="dmContainer"
-        class="w-full relative"
+  <div class="w-full h-full relative of-hidden diagram-container-bg" id="diagram-container">
+    <DiagramContextMenu @menu-click="handleContextClick" :diagram="diagram">
+      <div ref="dmContainer" class="w-full relative"
         :class="[timeSliderOpen ? 'h-[calc(100%-78px)]' : 'h-full']"
       >
         <canvas ref="slCanvas" :id="`sl-canvas-${randomId}`" class="canvas z-10"
@@ -168,7 +231,7 @@ const handleContextClick = (key: number) => {
     </DiagramContextMenu>
     <DiagramTimeSlider v-if="timeSliderOpen" v-model:value="timeSliderValue"
       v-model:time-range="hisTimeRange" @query="getHistoricalData"></DiagramTimeSlider>
-    <DiagramDetail v-model:open="detailOpen" :tags="detailTags"></DiagramDetail>
+    <DiagramDetail v-model:open="detailOpen" :coords="detailCoords"></DiagramDetail>
     <DiagramTrendModal
       v-model:open="modalOpen"
       :tags="tagsList"
@@ -183,6 +246,7 @@ const handleContextClick = (key: number) => {
   background-size: 40px 40px;
   background-position: center;
 }
+
 .canvas {
   position: absolute;
   top: 0;

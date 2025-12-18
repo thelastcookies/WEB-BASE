@@ -40,7 +40,7 @@ const graphConfig: GraphConfig[] = [
     ],
   },
   {
-    name: '断路器', type: 'switch',
+    name: '断路器', type: 'ctmp',
     images: [
       'symbols/new-energy/断路器-variant1.svg',
       'symbols/new-energy/断路器-variant2.svg',
@@ -180,6 +180,8 @@ const graphConfig: GraphConfig[] = [
   { name: '调压稳压器', type: 'static', image: 'symbols/new-energy/static/调压稳压器.svg' },
   { name: '风机模型', type: 'static', image: 'symbols/new-energy/static/风机模型.svg' },
 
+  { name: '操作按钮（开机）', type: 'button', image: 'symbols/basic/操作按钮（开机）.svg' },
+  { name: '操作按钮（关机）', type: 'button', image: 'symbols/basic/操作按钮（关机）.svg' },
   // 火电
   { name: '脱硝反应器', type: 'static', image: 'symbols/thermal-power/static/脱硝反应器.svg' },
 ];
@@ -191,16 +193,16 @@ export const getNodeGraph = (d: DiagramData, map?: Map<string, number>): NodeGra
   if (graph?.image) {
     return { ...graph, src: url + graph.image };
   } else if (graph?.images) {
-    if (graph.type === 'switch') {
+    if (graph.type === 'switch' || graph.type === 'ctmp') {
       const tag = d.a?.['node.tag'] ?? null;
       let v = tag ? getTagValue(tag, map) : 1;
       const reverse = d.a?.['node.type.switch.reverse'] ?? false;
       if (reverse) v = v ^ 1;
       return { ...graph, src: url + graph.images![v] };
-    } else if (graph.type === 'ctmp' || graph.type === 'CB') {
+    } else if (graph.type === 'CB') {
       // 断路器组合与双合分测点
-      const tag1 = d.a?.['node.tag.cmp'] ?? d.a?.['node.tag.CB'] ?? null;
-      const tag2 = d.a?.['node.tag.tmp'] ?? d.a?.['node.tag.drawout'] ?? null;
+      const tag1 = d.a?.['node.tag.CB'] ?? null;
+      const tag2 = d.a?.['node.tag.drawout'] ?? null;
       let v1 = tag1 ? getTagValue(tag1, map) : 1;
       let v2 = tag2 ? getTagValue(tag2, map) : 1;
       let v = parseInt('' + v1 + v2, 2);

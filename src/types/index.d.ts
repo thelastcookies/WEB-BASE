@@ -75,3 +75,10 @@ export interface IFrameMessage {
   type: 'message';
   content: MessageArgsProps;
 }
+
+export interface ContextMenuItem {
+  key: number;
+  value: string;
+  disabled?: boolean | (() => boolean);
+  type?: 'group';
+}

@@ -586,11 +586,11 @@ const otherForm = ref<Recordable<any>>({
       >
         <div class="flex justify-between">
           <BaseIcon icon="i-mdi:flag-triangle" class="c-red" />
-          插槽内容
+          默认插槽内容
           <BaseIcon icon="i-mdi:flag-triangle" class="c-green" />
         </div>
         <template #btn>
-          <a-button danger>覆盖全部按钮</a-button>
+          <a-button>#btn 插槽内容，覆盖全部按钮</a-button>
         </template>
       </QueryForm>
       <QueryForm
@@ -598,8 +598,11 @@ const otherForm = ref<Recordable<any>>({
         :fields="otherFields"
         v-model:form="otherForm"
       >
-        <template #sub-btn>
-          <a-button class="ml-2" danger>覆盖「清空」按钮</a-button>
+        <template #fst-btn>
+          <a-button>#fst-btn 插槽内容</a-button>
+        </template>
+        <template #snd-btn>
+          <a-button class="ml-2" danger>#snd-btn 插槽内容</a-button>
         </template>
       </QueryForm>
     </div>
@@ -646,13 +649,13 @@ const otherForm = ref<Recordable<any>>({
         <ol>
           <li>默认插槽，位置在操作按钮前，用于扩展当前不支持的表单以及非表单内容。</li>
           <li>name 为 btn 的插槽，默认内容为按钮区，即「查询」与「清空」按钮。使用该插槽会覆盖所有按钮。</li>
-          <li>name 为 sub-btn 的插槽，默认内容为「清空」按钮。使用该插槽会覆盖按钮「清空」按钮。</li>
+          <li>name 为 snd-btn 的插槽，默认内容为「清空」按钮。使用该插槽会覆盖按钮「清空」按钮。</li>
         </ol>
         <p>
           第一行的 QueryForm 演示了默认插槽与 #btn 插槽的使用。
         </p>
         <p>
-          第二行的 QueryForm 演示了 #sub-btn 插槽的使用。
+          第二行的 QueryForm 演示了 #snd-btn 插槽的使用。
         </p>
       </div>
     </div>

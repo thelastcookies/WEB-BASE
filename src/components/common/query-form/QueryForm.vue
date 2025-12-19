@@ -143,11 +143,13 @@ const handleClear = () => {
       </a-col>
       <a-col class="text-right mb-3" :span="SPAN" :offset="btnGroupOffset">
         <slot name="btn">
-          <a-button type="primary" html-type="submit">
-            <BaseIcon icon="i-mdi-magnify" />
-            查询
-          </a-button>
-          <slot name="sub-btn">
+          <slot name="fst-btn">
+            <a-button type="primary" html-type="submit">
+              <BaseIcon icon="i-mdi-magnify" />
+              查询
+            </a-button>
+          </slot>
+          <slot name="snd-btn">
             <a-button class="ml-2" @click="handleClear">
               <BaseIcon icon="i-mdi-filter-remove-outline" />
               清空

@@ -1,5 +1,3 @@
-import type { DiagramData, DiagramDataWithPosition, DiagramJson } from '@/types/diagram';
-
 const { selections } = storeToRefs(useDiagramStore());
 
 const selectionIds = computed(() => selections.value.map(item => item.i));

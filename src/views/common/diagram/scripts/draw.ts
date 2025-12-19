@@ -1,7 +1,3 @@
-import type { DiagramData, DiagramDataWithPosition, NodeGraph, XYPoint } from '@/types/diagram';
-import type { EdgeStyle, TextStyle } from '@/types/diagram/style';
-import type { NodeShapeAttr } from '@/types/diagram/attr';
-
 const { imageMap } = useDiagramStore();
 
 /**

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs';
-import type { Diagram as DiagramType } from '@/views/common/diagram/scripts';
 
 const props = defineProps<{
   href?: string;
@@ -15,7 +14,7 @@ const slCanvas = ref<HTMLCanvasElement>();
 
 const randomId = nanoid(6);
 
-const diagram = ref<DiagramType>();
+const diagram = ref<Diagram>();
 // const loading = ref(true);
 
 const nodeTagArr = ref<string[]>([]);
@@ -42,12 +41,12 @@ const load = async () => {
     const json = await res.json();
 
     diagram.value = new Diagram(json, randomId);
-    nodeTagArr.value = diagram.value.getTags();
+    nodeTagArr.value = diagram.value!.getTags();
 
     // 请求实时数据并定时
     resume();
 
-    const cTags = diagram.value.getControlTags();
+    const cTags = diagram.value!.getControlTags();
     if (cTags && cTags.length) {
       await fetchControl(cTags);
     }

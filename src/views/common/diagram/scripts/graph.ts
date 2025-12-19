@@ -1,5 +1,3 @@
-import type { DiagramData, GraphConfig, NodeGraph } from '@/types/diagram';
-
 const url = import.meta.env.APP_DIAGRAM_RESOURCE_URL + '/';
 
 const graphConfig: GraphConfig[] = [

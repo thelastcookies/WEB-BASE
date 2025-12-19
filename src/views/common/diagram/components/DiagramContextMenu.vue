@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { Diagram as DiagramType } from '@/views/common/diagram/scripts';
-
 const props = withDefaults(defineProps<{
-  diagram?: DiagramType;
+  diagram?: Diagram;
 }>(), {});
 const emit = defineEmits<{
   (e: 'menuClick', key: number, coords: { x: number; y: number }): void;

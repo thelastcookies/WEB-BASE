@@ -58,33 +58,29 @@ watch(open, async (v) => {
     pause();
     return;
   }
+  const tags = selections.value.map(s => s.a?.['node.tag']!);
+  const len = tags.length;
 
   // 定位
   let x = props.coords.x;
   let y = props.coords.y;
-  // await nextTick(() => {
-  let top: number, left: number;
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-  // const domWidth = domRef.value!.clientWidth;
-  // const domHeight = domRef.value!.clientHeight;
-  // const parent = domRef.value!.parentNode as HTMLElement;
-  const parent = document.getElementById('diagram-container');
-  y -= parent!.offsetTop;
-  x -= parent!.offsetLeft;
-  // if (y + domHeight > viewportHeight) top = y - domHeight;
-  // else top = y;
-  // if (x + domWidth > viewportWidth) left = x - domWidth;
-  // else left = x;
-  top = y;
-  left = x;
 
-  style.value = { top: top + 'px', left: left + 'px' };
+  const parent = document.getElementById('diagram-container')!;
+  // 外层相对视口偏移修正
+  y -= parent.offsetTop;
+  x -= parent.offsetLeft;
+  const viewportWidth = parent.clientWidth;
+  const viewportHeight = parent.clientHeight;
+  // 超出调整
+  const domWidth = 350;
+  const domHeight = len * 104 + len - 1;
+  if (y + domHeight > viewportHeight) y -= domHeight;
+  if (x + domWidth > viewportWidth) x -= domWidth;
+
+  style.value = { top: y + 'px', left: x + 'px' };
   visible.value = true;
-  // });
   loading.value = true;
 
-  const tags = selections.value.map(s => s.a?.['node.tag']!);
   const { Data: Tags } = await getPointsInfoByTag({ tags: tags.join(',') });
   if (!Tags || !Tags.length) {
     message.error('未查询到该测点详细配置');

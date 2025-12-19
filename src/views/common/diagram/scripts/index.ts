@@ -298,39 +298,56 @@ export class Diagram {
   /**
    * 鼠标点选处理
    * @param e
+   * @param keep 保留已选内容
    */
-  setSelection = (e: MouseEvent) => {
+  setSelection = (e: MouseEvent, keep = false) => {
     return new Promise<DiagramDataWithPosition>(resolve => {
       e.stopPropagation();
       let x = e.offsetX;
       let y = e.offsetY;
 
-      // 鼠标点击位置修正
-      x += Number(this.left) - this.PADDING;
-      y += Number(this.top) - this.PADDING;
+      const selectedGraphs = this.getNodeByPosition({ x, y });
 
-      const ids = controlKey.value || metaKey.value ? [...selectionIds.value] : [];
-      // 检查是否点击了某个对象
-      for (const [id, d] of this.dmMap) {
-        const name = d.p.name;
-        const graph = graphMap.get(name);
-        if (!graph || ['static', 'shape', 'table'].includes(graph.type)) continue;
-        const dx = d.x! - d.w! / 2;
-        const dy = d.y! - d.h! / 2;
-        if (x >= dx &&
-          x <= dx + d.w! &&
-          y >= dy &&
-          y <= dy + d.h!) {
-          if (graph.type === 'button') {
-            return resolve(d);
-          }
-          ids.push(id);
+      let ids = controlKey.value || metaKey.value || keep ? [...selectionIds.value] : [];
+      selectedGraphs.forEach(g => {
+        if (g.p.name === 'button') {
+          return resolve(g);
         }
-      }
+        ids.push(g.i);
+      });
+      ids = Array.from(new Set(ids));
       this.drawSelection(ids);
       selections.value = ids.map(id => this.dmMap.get(id)!);
     });
   };
+
+  /**
+   * 按鼠标事件位置获取所在节点
+   * @param x offsetX
+   * @param y offsetY
+   */
+  getNodeByPosition({ x, y }: { x: number; y: number }) {
+    // 鼠标点击位置修正
+    x += Number(this.left) - this.PADDING;
+    y += Number(this.top) - this.PADDING;
+
+    const graphs: DiagramDataWithPosition[] = [];
+    // 检查是否点击了某个对象
+    for (const [_, d] of this.dmMap) {
+      const name = d.p.name;
+      const graph = graphMap.get(name);
+      if (!graph || ['static', 'shape', 'table'].includes(graph.type)) continue;
+      const dx = d.x! - d.w! / 2;
+      const dy = d.y! - d.h! / 2;
+      if (x >= dx &&
+        x <= dx + d.w! &&
+        y >= dy &&
+        y <= dy + d.h!) {
+        graphs.push(d);
+      }
+    }
+    return graphs;
+  }
 
   dispose() {
     if (this.animationId) {

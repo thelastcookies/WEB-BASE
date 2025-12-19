@@ -146,8 +146,11 @@ const handleMouseDown = async (e: MouseEvent) => {
       // 开关机按钮
       controlModalOpen.value = true;
     }
-  } else {
-
+  } else if (e.button === 2) {
+    const node = diagram.value!.getNodeByPosition({ x: e.offsetX, y: e.offsetY });
+    if (node && node.length) {
+      await diagram.value!.setSelection(e, true);
+    }
   }
 };
 

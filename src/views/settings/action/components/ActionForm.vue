@@ -187,7 +187,7 @@ const handleDelete = async () => {
         </a-row>
         <a-row>
           <a-col :span="12">
-            <a-form-item label="路径配置" name="Url" tooltip="将与父级配置拼接组成地址栏#后显示的地址">
+            <a-form-item label="URL 配置" name="Url" tooltip="浏览器地址栏 URL">
               <a-input v-model:value="formData.Url" placeholder="请输入路径" />
             </a-form-item>
           </a-col>
@@ -200,7 +200,7 @@ const handleDelete = async () => {
         <a-row>
           <a-col :span="6">
             <a-form-item
-              label="是否启用" name="ShowInMenu"
+              label="是否显示" name="ShowInMenu"
               :label-col="{ span: 12 }" :wrapper-col="{ span: 12 }"
             >
               <a-switch v-model:checked="formData.ShowInMenu"

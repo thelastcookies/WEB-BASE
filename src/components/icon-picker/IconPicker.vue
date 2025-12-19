@@ -25,6 +25,7 @@ const handleSelect = (icon: string) => {
   open.value = false;
 };
 
+// TODO 已选的清空
 </script>
 
 <template>

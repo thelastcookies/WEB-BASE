@@ -84,6 +84,7 @@ const filterTreeNode = (node: EventDataNode) => {
   return searchValue.value ? node.Name.indexOf(searchValue.value) > -1 : false;
 };
 
+// TODO 需要左侧菜单纵向滚动条
 </script>
 
 <template>
@@ -100,7 +101,7 @@ const filterTreeNode = (node: EventDataNode) => {
       <a-divider my-4 />
     </template>
     <a-tree
-      class="w-full flex-1 overflow-y-auto"
+      class="w-full flex-1"
       v-model:selected-keys="selectedKeys"
       v-model:checked-keys="checkedKeys"
       :expanded-keys="expandedKeys"

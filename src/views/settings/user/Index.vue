@@ -18,9 +18,9 @@ const pagination = ref({
   showSizeChanger: true,
 });
 
-const handleTableChange = (p: TablePaginationConfig) => {
-  pagination.value.current = p.current ?? 1;
-  pagination.value.pageSize = p.pageSize ?? 20;
+const handleTableChange = ({ pageSize, current }: TablePaginationConfig) => {
+  pagination.value.current = current ?? 1;
+  pagination.value.pageSize = pageSize ?? 20;
   fetch();
 };
 

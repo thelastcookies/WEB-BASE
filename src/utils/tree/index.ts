@@ -50,6 +50,10 @@ export class TreeNode<T extends TreeNodeInterface = TreeNodeInterface> implement
     }
   }
 
+  getName(): string | undefined {
+    return this.getLabel();
+  }
+
   getLabel(): string | undefined {
     return this.name ?? this.label ?? this.title ?? this.value ?? this.Name;
   }

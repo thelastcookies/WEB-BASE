@@ -45,7 +45,7 @@ const handleReload = async () => {
 <template>
   <div class="w-full h-full p-3 flex gap-3">
     <div class="w-30% h-full bg-ant.bg-container rounded-ant.br p-3">
-      <a-spin :spinning="loading">
+      <a-spin :spinning="loading" :wrapper-class-name="'h-full'">
         <ActionTree
           searchable
           :type="EditEnum.EDIT"

@@ -84,15 +84,14 @@ watch(open, (v) => {
 
 <template>
   <a-modal v-model:open="open"
-           :title="title"
-           :confirm-loading="loading"
-           ok-text="保存"
-           @ok="handleSubmit"
-           @cancel="handleClear"
+    :title="title"
+    :confirm-loading="loading"
+    ok-text="保存"
+    @ok="handleSubmit"
+    @cancel="handleClear"
   >
-    <a-form ref="formRef" :model="formData" :label-col="{ span: 5 }"
-            :rules="rules" :disabled="loading"
-            :wrapper-col="{ span: 18 }" class="px-4 pt-4">
+    <a-form ref="formRef" :model="formData" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }"
+      :rules="rules" :disabled="loading" class="px-4 pt-4">
       <a-form-item label="角色名" name="RoleName">
         <a-input v-model:value="formData.RoleName" />
       </a-form-item>

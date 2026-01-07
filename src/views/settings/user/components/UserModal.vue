@@ -109,15 +109,14 @@ getRoles();
 
 <template>
   <a-modal v-model:open="open"
-           :title="title"
-           :confirm-loading="loading"
-           ok-text="保存"
-           @ok="handleSubmit"
-           @cancel="handleClear"
+    :title="title"
+    :confirm-loading="loading"
+    ok-text="保存"
+    @ok="handleSubmit"
+    @cancel="handleClear"
   >
-    <a-form ref="formRef" :model="formData" :label-col="{ span: 4 }"
-            :rules="rules" :disabled="loading"
-            :wrapper-col="{ span: 18 }" class="px-4 pt-4">
+    <a-form ref="formRef" :model="formData" :label-col="{ span: 4 }" :wrapper-col="{ span: 18 }"
+      :rules="rules" :disabled="loading" class="px-4 pt-4">
       <a-form-item label="账号" name="UserName">
         <a-input v-model:value="formData.UserName" />
       </a-form-item>
@@ -135,10 +134,10 @@ getRoles();
       </a-form-item>
       <a-form-item label="角色" name="RoleIdList">
         <a-select allow-clear
-                  show-search
-                  option-filter-prop="label"
+          show-search
+          option-filter-prop="label"
           v-model:value="formData.RoleIdList"
-                  :options="roleList"
+          :options="roleList"
         />
       </a-form-item>
       <a-form-item label="备注" name="Remark">

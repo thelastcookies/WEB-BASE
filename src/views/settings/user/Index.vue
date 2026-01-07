@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import type { Key, Recordable } from '@/types';
 import type { TablePaginationConfig } from 'ant-design-vue';
-import type { UserRecord } from '@/api/admin/user/types';
-import type { EditEnum as EditEnumType } from '@/constants/enums';
 
 /**
  * table 属性与方法
  */
 const selectedRowKeys = ref<Key[]>([]);
-const list = ref([] as UserRecord[]);
+const list = ref<UserRecord[]>([]);
 const loading = ref(false);
 
 const pagination = ref({
@@ -29,7 +26,7 @@ const handleTableChange = ({ pageSize, current }: TablePaginationConfig) => {
  */
 const modalOpen = ref(false);
 const modalType = ref(EditEnum.ADD);
-const modalData = ref({} as UserRecord);
+const modalData = ref<UserRecord>({});
 
 /**
  * 数据交互与处理方法
@@ -37,8 +34,8 @@ const modalData = ref({} as UserRecord);
 const qForm = ref<Recordable<any>>({});
 const fetch = async () => {
   loading.value = true;
-  const res = await getUserList({ Search: qForm.value });
-  if (res.Data) list.value = res.Data;
+  const { Data } = await getUserList({ Search: qForm.value });
+  if (Data) list.value = Data;
   loading.value = false;
 };
 
@@ -57,7 +54,7 @@ const onSelectionChange = (keys: Key[]) => {
   selectedRowKeys.value = keys;
 };
 
-const handleEdit = (type: EditEnumType, data?: UserRecord) => {
+const handleEdit = (type: EditEnum, data?: UserRecord) => {
   modalOpen.value = true;
   modalType.value = type;
   if (type === EditEnum.EDIT) {

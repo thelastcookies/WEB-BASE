@@ -1,4 +1,3 @@
-import type { TableEditableColumnProps } from '@/components/common/inline-edit-table/types';
 import type { DefaultOptionType } from 'ant-design-vue/es/vc-select/Select';
 
 export const menuTypeOptions: DefaultOptionType[] = [

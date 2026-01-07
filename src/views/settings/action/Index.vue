@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import type { ActionResponseRecord } from '@/api/admin/action/types';
-import type { TreeNode } from '@/utils/tree';
-
 const loading = ref(false);
 
 const currentId = ref<string[]>([]);

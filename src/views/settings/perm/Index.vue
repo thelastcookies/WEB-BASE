@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import type { Key, Recordable } from '@/types';
-import type { RoleRecord } from '@/api/admin/role/types';
-import type { ActionResponseRecord } from '@/api/admin/action/types';
-import type { TreeNode } from '@/utils/tree';
-
 /**
  * table 属性与方法
  */
 const selectedRowKeys = ref<Key[]>([]);
 const currentRole = ref<RoleRecord>();
-const roleList = ref([] as RoleRecord[]);
+const roleList = ref<RoleRecord[]>([]);
 const loading = ref(false);
 const roleTableCols = roleTableColumns.filter(item => item.dataIndex !== 'operation');
 
@@ -33,8 +28,8 @@ const actionTreeData = ref<TreeNode<ActionResponseRecord>[]>();
 
 const fetch = async () => {
   loading.value = true;
-  const res = await getRoleList({ Search: qForm.value });
-  if (res.Data) roleList.value = res.Data;
+  const { Data: RoleData } = await getRoleList({ Search: qForm.value });
+  if (RoleData) roleList.value = RoleData;
   const { Data } = await getActionTreeList({});
   if (Data) actionTreeData.value = createTree(Data);
   loading.value = false;

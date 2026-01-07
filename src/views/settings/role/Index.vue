@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import type { Key, Recordable } from '@/types';
-import type { RoleRecord } from '@/api/admin/role/types';
-import type { EditEnum as EditEnumType } from '@/constants/enums';
-
 /**
  * table 属性与方法
  */
 const selectedRowKeys = ref<Key[]>([]);
-const list = ref([] as RoleRecord[]);
+const list = ref<RoleRecord[]>([]);
 const loading = ref(false);
 
 /**
@@ -15,7 +11,7 @@ const loading = ref(false);
  */
 const modalOpen = ref(false);
 const modalType = ref(EditEnum.ADD);
-const modalData = ref({} as RoleRecord);
+const modalData = ref<RoleRecord>({});
 
 /**
  * 数据交互与处理方法
@@ -23,8 +19,8 @@ const modalData = ref({} as RoleRecord);
 const qForm = ref<Recordable<any>>({});
 const fetch = async () => {
   loading.value = true;
-  const res = await getRoleList({ Search: qForm.value });
-  if (res.Data) list.value = res.Data;
+  const { Data } = await getRoleList({ Search: qForm.value });
+  if (Data) list.value = Data;
   loading.value = false;
 };
 
@@ -43,7 +39,7 @@ const onSelectionChange = (keys: Key[]) => {
   selectedRowKeys.value = keys;
 };
 
-const handleEdit = (type: EditEnumType, data?: RoleRecord) => {
+const handleEdit = (type: EditEnum, data?: RoleRecord) => {
   modalOpen.value = true;
   modalType.value = type;
   if (type === EditEnum.EDIT) {

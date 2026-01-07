@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { RoleRecord } from '@/api/admin/role/types';
-import type { FormInstance } from 'ant-design-vue/es/form/Form';
 import type { Rule } from 'ant-design-vue/es/form';
 import type { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
-import type { EditEnum as EditEnumType } from '@/constants/enums';
+import type { FormInstance } from 'ant-design-vue';
 
 const open = defineModel('open', { default: false });
 
 const props = withDefaults(defineProps<{
   id?: string;
-  type: EditEnumType;
+  type: EditEnum;
 }>(), {
   type: EditEnum.VIEW,
 });
@@ -30,9 +28,9 @@ const title = computed(() => {
 });
 
 const formRef = ref<FormInstance>();
-const formData = ref({
+const formData = ref<RoleRecord>({
   RoleType: RoleTypeEnum.NORMAL,
-} as RoleRecord);
+});
 
 const rules: Record<string, Rule[]> = {
   RoleName: [{ required: true, message: '角色名不可为空' }],

@@ -1,5 +1,4 @@
 import type { TableColumnProps } from 'ant-design-vue';
-import type { QueryFormField } from '@/components/common/query-form/types';
 
 export enum UserStateEnum {
   ENABLE = '1',

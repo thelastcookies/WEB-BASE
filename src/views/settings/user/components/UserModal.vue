@@ -31,10 +31,10 @@ const title = computed(() => {
 });
 
 const formRef = ref<FormInstance>();
-const formData = ref({
+const formData = ref<UserRecord>({
   Sex: SexEnum.MALE,
   State: UserStateEnum.ENABLE,
-} as UserRecord);
+});
 
 const rules: Record<string, Rule[]> = {
   UserName: [{ required: true, message: '账号不可为空' }],

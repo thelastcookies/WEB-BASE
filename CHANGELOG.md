@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.28.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.27.0...v0.28.0) (2026-01-13)
+
+
+### Features
+
+* 扩展 QueryForm 插槽功能，补充 Sample 演示 ([26291a2](https://github.com/thelastcookies/WEB-BASE/commit/26291a2ec41e80068b6f4c4791366706947081dd))
+* 新增 AGC 接口与类型声明 ([1a913c6](https://github.com/thelastcookies/WEB-BASE/commit/1a913c6e93f2cc4aba7f2574ef60d3644cf7e5ff))
+* 新增 AVC 接口与类型声明 ([14efdf5](https://github.com/thelastcookies/WEB-BASE/commit/14efdf57c0b5ee4e168ed8e8f9fec8c20116c096))
+* 新增升压站接口与类型声明 ([08b1b2e](https://github.com/thelastcookies/WEB-BASE/commit/08b1b2e9408a3d5d362b35c9e754a51baed5539b))
+* 新增告警接口与类型声明 ([b87423b](https://github.com/thelastcookies/WEB-BASE/commit/b87423bc0efd6e05f311415ea69146320b38194e))
+* 新增场站接口与类型声明 ([3e0df2d](https://github.com/thelastcookies/WEB-BASE/commit/3e0df2d98e4bc3194ad0ddaa6f1a626226b18946))
+* 新增气象仪接口与类型声明 ([49cdfec](https://github.com/thelastcookies/WEB-BASE/commit/49cdfecfd74cde153f6d5ffa409aeeee23ea4f6f))
+* 新增汇流箱接口与类型声明 ([62afe64](https://github.com/thelastcookies/WEB-BASE/commit/62afe64d00ce12b69422600af78a0e4d540c8209))
+* 新增电能表接口与类型声明 ([72170d2](https://github.com/thelastcookies/WEB-BASE/commit/72170d262a2c463198258aad4c88c3d654b5ab2a))
+* 新增箱变接口与类型声明 ([0b3770d](https://github.com/thelastcookies/WEB-BASE/commit/0b3770d0804870a437e23ba08ec64a7c55446728))
+* 新增组态控制与测点信息查询功能，修复已知问题 ([9e168de](https://github.com/thelastcookies/WEB-BASE/commit/9e168de26a8215be94d39ba60b8af115433a5d76))
+* 新增组织机构接口与类型声明 ([1e5af50](https://github.com/thelastcookies/WEB-BASE/commit/1e5af5032d468bd6adf9ffad78a7ab3ee6784e05))
+* 新增逆变器接口与类型声明 ([d9409f5](https://github.com/thelastcookies/WEB-BASE/commit/d9409f59945b48dce24266727b3701eab7ca32bb))
+* 新增通用的控制弹窗，控制下发接口等 ([ca4372b](https://github.com/thelastcookies/WEB-BASE/commit/ca4372b25c34518a3f7e8afaabc20617ff03d8f3))
+* 新增风机接口与类型声明 ([60ed5ed](https://github.com/thelastcookies/WEB-BASE/commit/60ed5ed3670e9ee549f32f24fc817318e3a71d35))
+* 更新实时、历史、测点信息接口与通用数据定时刷新方法 ([3273fc5](https://github.com/thelastcookies/WEB-BASE/commit/3273fc5b969f4c18689d9efca5645dae2d43b09b))
+
+
+### Bug Fixes
+
+* 修复构建嵌套路由时可能的问题，增加页面类型的嵌套路由组织支持 ([49188bf](https://github.com/thelastcookies/WEB-BASE/commit/49188bfd00e3325d90fb4598a7ff552e37591a86))
+* 修复树判断根节点方法的问题 ([176ca2a](https://github.com/thelastcookies/WEB-BASE/commit/176ca2a8253cc165a334753b4b7cc97266f2c508))
+* 修复组态已知的鼠标交互问题 ([495f5ee](https://github.com/thelastcookies/WEB-BASE/commit/495f5eef7d1313f3d256d079a3293b84bb355a6d))
+* 修复组态测点弹窗超出父级的问题 ([1635c91](https://github.com/thelastcookies/WEB-BASE/commit/1635c91fe7f729cf2f93ac2eaed6605322e73e3f))
+* 调整图元变色绘制逻辑 ([05bd84c](https://github.com/thelastcookies/WEB-BASE/commit/05bd84c4709ec7dbee786e1d4924a5bb66dcc39a))
+
 ## [0.27.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.26.0...v0.27.0) (2025-10-25)
 
 

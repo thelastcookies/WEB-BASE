@@ -131,13 +131,15 @@ const handleSubmit = async () => {
             保存
           </a-button>
         </div>
-        <ActionTree
-          searchable
-          checkable
-          default-expand-all
-          :tree="actionTreeData"
-          v-model:checked-keys="checkedActions"
-        />
+        <div class="h-[calc(100%-48px)]">
+          <ActionTree
+            searchable
+            checkable
+            default-expand-all
+            :tree="actionTreeData"
+            v-model:checked-keys="checkedActions"
+          />
+        </div>
       </template>
       <template v-else>
         <a-empty class="mt-25%" :image="Empty.PRESENTED_IMAGE_SIMPLE">

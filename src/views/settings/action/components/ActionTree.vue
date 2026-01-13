@@ -97,7 +97,7 @@ const filterTreeNode = (node: EventDataNode) => {
       <a-divider my-4 />
     </template>
     <a-tree
-      class="w-full flex-1"
+      class="w-full flex-1 of-y-auto"
       v-model:selected-keys="selectedKeys"
       v-model:checked-keys="checkedKeys"
       :expanded-keys="expandedKeys"

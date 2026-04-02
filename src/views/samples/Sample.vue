@@ -8,6 +8,7 @@ import EChartsSample from '@/views/samples/echarts/EChartsSample.vue';
 import InlineEditTableSample from '@/views/samples/inline-edit-table/InlineEditTableSample.vue';
 import UploadSample from '@/views/samples/upload/UploadSample.vue';
 import ExportSample from '@/views/samples/export/ExportSample.vue';
+import RegionPickerSample from '@/views/samples/region-picker/RegionPickerSample.vue';
 </script>
 <template>
   <QueryFormSample />
@@ -19,6 +20,8 @@ import ExportSample from '@/views/samples/export/ExportSample.vue';
   <UploadSample />
   <a-divider>导出</a-divider>
   <ExportSample />
+  <a-divider>省市选择器</a-divider>
+  <RegionPickerSample />
 </template>
 <style scoped lang="less">
 

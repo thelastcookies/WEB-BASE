@@ -26,7 +26,6 @@ export const AutoImportPluginConfig: PluginOption = AutoImport({
     'src/stores/**/*.ts',
     'src/types/**/*.ts',
     'src/utils/**/*.ts',
-    'src/views/**/*.vue',
     'src/views/**/*.ts',
     'src/components/common/echarts/*.ts',
     'src/components/common/control-modal/*.ts',

@@ -14,11 +14,10 @@ const finishLoading = () => {
 // 接收来自 IFrame 页面中的消息
 const handleMessage = (event: MessageEvent) => {
   // 确认消息来源是预期的域名
-  if (!whiteOriginList.length && whiteOriginList.includes(event.origin)) {
+  if (whiteOriginList.length && !whiteOriginList.includes(event.origin)) {
     console.warn(`IFrame.vue: Current origin '${event.origin}' is not in APP_WHITE_ORIGIN configuration.`);
     return;
   }
-
   const msg = <IFrameMessage>event.data;
   if (msg.type === 'message') {
     message.open(msg.content);

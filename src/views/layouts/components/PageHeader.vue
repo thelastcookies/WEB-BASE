@@ -11,17 +11,7 @@ const currentRoute = ref<RouteLocationNormalized>();
 
 // 订阅路由变化，设置面包屑
 listenRouteChange((route: RouteLocationNormalized) => {
-  let name: RecordName;
-  if (route.redirectedFrom && route.redirectedFrom.name !== '404') {
-    if (route.name === 'DIAGRAM') {
-      name = route.redirectedFrom.name as RecordName;
-    } else {
-      name = route.name as RecordName;
-    }
-  } else {
-    name = route.name as RecordName;
-  }
-  const ancestorChain = findActionAncestorChain(actionTree.value, name);
+  const ancestorChain = findActionAncestorChain(actionTree.value, route.name as RecordName);
   if (!ancestorChain || !ancestorChain.length) return;
   breadcrumb.value = ancestorChain.reverse();
   currentRoute.value = route;

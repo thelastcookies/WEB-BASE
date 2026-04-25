@@ -47,7 +47,6 @@ watch(actionTree, (tree: TreeNode<ActionRecordRaw>[]) => {
         </a-layout-content>
       </a-layout>
     </a-layout>
-    <ControlModal />
     <a-layout-footer v-if="deviceType === 'mobile'" class="!p-0">
       <FooterMenu :menu="menu"></FooterMenu>
     </a-layout-footer>

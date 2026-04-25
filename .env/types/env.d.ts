@@ -37,8 +37,6 @@ interface ImportMetaEnv {
   readonly APP_API_BASE_URL: string;
   readonly APP_API_ADMIN_URL: string;
   readonly APP_WHITE_ORIGIN: string;
-  // 组态部署目录路径
-  readonly APP_DIAGRAM_RESOURCE_URL: string;
   /**
    * APP_MOCK_TYPE
    * 是否启用 Mock，以及 Mock 来源

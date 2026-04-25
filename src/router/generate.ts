@@ -97,9 +97,6 @@ const actionToRoute = (action: TreeNode<ActionRecordRaw>): RouteRecordRaw => {
   } else if (action.type === MenuTypeEnum.IFRAME) {
     route.component = getRouterModule('IFrame');
     route.meta = { href: action.resource };
-  } else if (action.type === MenuTypeEnum.DIAGRAM) {
-    route.component = getRouterModule('Diagram');
-    route.meta = { href: action.resource };
   }
   route.meta = merge(route.meta, {
     title: action.title,

@@ -10,7 +10,6 @@ export type ActionRecordRaw =
   | ActionRecordRedirect
   | ActionRecordLink
   | ActionRecordIFrame
-  | ActionRecordDiagram
   ;
 
 interface _ActionBase extends TreeNodeInterface {
@@ -71,13 +70,6 @@ export interface ActionRecordLink extends _ActionBase {
 export interface ActionRecordIFrame extends _ActionBase {
   url: string;
   // IFrame 地址
-  resource: string;
-  keepAlive?: boolean;
-}
-
-export interface ActionRecordDiagram extends _ActionBase {
-  url: string;
-  // 组态图地址
   resource: string;
   keepAlive?: boolean;
 }

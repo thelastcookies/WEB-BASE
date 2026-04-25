@@ -70,12 +70,7 @@ const handleTabClick = (path: Key) => {
 // 订阅路由变化，设置标签页
 listenRouteChange((route: RouteLocationNormalized) => {
   let title: string;
-  if (route.name === 'DIAGRAM') {
-    const href = (route.query?.href as string).split(/[./]/);
-    title = href[href.length - 2];
-  } else {
-    title = route.meta?.title as string;
-  }
+  title = route.meta?.title as string;
   updateTab({
     name: route.name!,
     title,

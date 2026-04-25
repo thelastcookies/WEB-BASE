@@ -27,8 +27,6 @@ export const AutoImportPluginConfig: PluginOption = AutoImport({
     'src/types/**/*.ts',
     'src/utils/**/*.ts',
     'src/views/**/*.ts',
-    'src/components/common/echarts/*.ts',
-    'src/components/common/control-modal/*.ts',
     'src/components/common/query-form/*.ts',
     'src/components/common/inline-edit-table/*.ts',
     '!src/views/curd/**/*.ts',

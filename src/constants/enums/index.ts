@@ -33,8 +33,6 @@ export enum MenuTypeEnum {
   LINK = 3,
   // iframe
   IFRAME = 4,
-  // 组态
-  DIAGRAM = 9,
 }
 
 /**

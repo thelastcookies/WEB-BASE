@@ -36,30 +36,37 @@
 |-- |-- auto-imports        # unplugin-auto-import
 |-- |-- unocss              # UnoCSS
 |-- |-- |-- antd-uno-theme.json # Antdv 的 CSS 变量参考
+|-- |-- |-- icons.ts        # 导入 UnoCSS 的 icon 类
 |-- |-- |-- index.ts
+|-- |-- |-- preset.ts
 |-- |-- |-- uno.config.ts   # UnoCSS 配置
+|-- |-- visualizer          # 打包监测
 |-- |-- vue-components      # unplugin-vue-components
 |-- |-- index.ts            # Vite 插件配置入口
 |-- public                  # 公共静态资源
-|-- |-- logo.svg            # 项目系统 logo
+|-- |-- logo.svg            # 应用 logo
 |-- src                     # 源代码
 |-- |-- api                 # 接口
 |-- |-- |-- index.ts        # 接口基本配置（同级目录下为各个功能模块的接口以及类型声明文件）
 |-- |-- assets              # 项目静态资源
 |-- |-- |-- font            # 字体资源
 |-- |-- |-- images          # 图片资源
-|-- |-- |-- theme           # 样式资源（侧重在变量与深色模式）
-|-- |-- |-- index.less      # 项目系统样式文件
+|-- |-- |-- style           # 应用级样式文件
+|-- |-- |-- |-- theme       # 样式资源（侧重在变量与深色模式）
+|-- |-- |-- |-- ant-fine-tuning.less  # Antdv 样式微调 
+|-- |-- |-- |-- index.less  # 全局样式表
 |-- |-- components          # 组件级别的 Vue 组件
 |-- |-- |-- base            # 基本组件
 |-- |-- |-- common          # 公共组件
-|-- |-- enums               # 枚举类型
-|-- |-- |-- http.ts         # http 请求相关的枚举类型
-|-- |-- |-- index.ts        # 公共枚举类型
-|-- |-- |-- naming-style.ts # 命名风格的枚举类型
+|-- |-- |-- icon-picker     # 图标选择器
+|-- |-- |-- region-picker   # 地区选择器
+|-- |-- |-- slide-picker    # 滑动选取器
+|-- |-- constants           # 应用级常量定义
 |-- |-- hooks               # 组合式函数
 |-- |-- |-- axios-extends   # axios 的封装，配置拦截器和错误处理
+|-- |-- |-- environment-check   # 环境检测
 |-- |-- |-- request.ts      # 按照 request methods 对 axios-extends 的封装
+|-- |-- |-- timed-refresh.ts    # 定时刷新
 |-- |-- router              # 路由管理（Vue Router）
 |-- |-- |-- generate.ts     # 生成路由
 |-- |-- |-- guard.ts        # 路由守卫
@@ -69,22 +76,22 @@
 |-- |-- |-- navigate.ts     # 路由导航
 |-- |-- stores              # 状态管理（Pinia）
 |-- |-- |-- action          # Action 状态
-|-- |-- |-- app.ts          # 项目系统状态
+|-- |-- |-- theme           # 主题状态
+|-- |-- |-- app.ts          # 应用状态
+|-- |-- |-- menu.ts         # 菜单状态
 |-- |-- |-- token.ts        # Token 状态
 |-- |-- |-- user.ts         # 用户信息状态
-|-- |-- types               # 全局的类型声明
-|-- |-- |-- constants       # 常量类型
-|-- |-- |-- symbol          # Symbol
-|-- |-- |-- action          # Action 类型
-|-- |-- |-- index.d.ts      # 公共类型声明
+|-- |-- types               # 应用级类型声明
 |-- |-- utils               # 工具
 |-- |-- views               # 页面
 |-- |-- |-- common          # 公共页面
 |-- |-- |-- exceptions      # 异常页面
 |-- |-- |-- layouts         # 布局页面
+|-- |-- |-- pages           # 业务页面
+|-- |-- |-- samples         # 示例页面
+|-- |-- |-- settings        # 设置页面
 |-- |-- App.vue             # 项目根组件
 |-- |-- main.ts             # 项目入口 TypeScript 脚本，用于创建 Vue 实例，配置全局设置并挂载根组件。
-|-- |-- style.css           # 项目根 CSS 文件
 |-- |-- vite-env.d.ts       # Vite 类型声明文件，用于定义全局的类型和变量。
 |-- .commitlintrc.json      # Commitlint 配置文件
 |-- .gitignore              # Git 忽略文件

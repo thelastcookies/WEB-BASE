@@ -59,6 +59,7 @@ const iconUrl = computed(() => {
   <template v-else>
     <img
       v-bind="$attrs"
+      class="vertical-unset"
       :class="{'logo': type === 'logo'}"
       :style="['base-icon', sizeStyle]"
       :src="iconUrl" :alt="type" />

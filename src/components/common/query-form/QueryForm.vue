@@ -8,10 +8,9 @@ import type { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
 // TODO 前端筛选
 
 const form = defineModel<Recordable<any>>('form', {
-  default: () => {
-  },
+  default: () => ({}),
 });
-const expand = defineModel<Boolean>('expand', { default: false });
+const expand = defineModel<Boolean>('expand', { default: () => false });
 
 const props = withDefaults(defineProps<{
   fields: QueryFormField[];

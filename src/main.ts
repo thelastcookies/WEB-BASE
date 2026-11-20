@@ -16,11 +16,6 @@ import router from '@/router';
 import '@/router/guards.ts';
 app.use(router);
 
-// UI框架 ant-design-vue
-import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/reset.css';
-app.use(Antd);
-
 // UnoCSS
 import 'virtual:uno.css';
 

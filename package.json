@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.2.1",
-    "@vueuse/math": "^14.2.1",
     "ant-design-vue": "^4.2.6",
     "axios": "1.15.2",
     "bowser": "^2.14.1",

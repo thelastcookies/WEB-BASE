@@ -1,4 +1,3 @@
-import 'dayjs/locale/zh-cn';
 import type { Handler } from 'mitt';
 
 const themeModeEnv = import.meta.env.APP_THEME;
@@ -20,9 +19,7 @@ const layoutModeEnv = import.meta.env.APP_LAYOUT_MODE;
  */
 
 export const useThemeStore = defineStore('theme', () => {
-  // todo 为 dayjs 配置本地化
   // 语言环境，为 Antdv 初始化
-  dayjs.locale('zh-cn');
 
   // 主题配色模式
   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

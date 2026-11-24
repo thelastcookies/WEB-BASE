@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.29.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.28.0...v0.29.0) (2026-11-24)
+
+
+### Features
+
+* 新增 Dify 全局注入示例 ([a2e20cb](https://github.com/thelastcookies/WEB-BASE/commit/a2e20cbe834c39f670d7abcc1be61f2853e63154))
+
+
+### Bug Fixes
+
+* 修复 dayjs 本地化导入的问题 ([3396b0b](https://github.com/thelastcookies/WEB-BASE/commit/3396b0b617e7f7b43d5880ac79ed2bea99b5be4b))
+* 完善 QueryForm ([bd46dfe](https://github.com/thelastcookies/WEB-BASE/commit/bd46dfeb564f38646c0ae00095b7ade369491de9))
+
 ## [0.28.0](https://github.com/thelastcookies/WEB-BASE/compare/v0.27.0...v0.28.0) (2026-04-25)
 
 
